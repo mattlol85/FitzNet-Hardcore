@@ -1,0 +1,7 @@
+name: Fitz NetHardcore
+version: ${project.version}
+main: org.fitznet.doomdns.fitznethardcore.FitzNetHardcore
+api-version: 1.13
+authors: [MatthewFitzgerald]
+description: Hardcore mod. Gives lives and regen.
+website: fitznet.doomdns.org
