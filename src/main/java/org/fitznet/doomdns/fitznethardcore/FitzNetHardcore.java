@@ -1,9 +1,7 @@
 //Matthew Fitzgerald Jan 19 2020
 package org.fitznet.doomdns.fitznethardcore;
 
-import jdk.nashorn.internal.ir.debug.JSONWriter;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,11 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-
-import static org.fitznet.doomdns.fitznethardcore.Logging.*;
+import static org.fitznet.doomdns.fitznethardcore.Logging.logInfo;
 
 public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
@@ -28,16 +22,17 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * <p>
      * -Future add afk check.
      */
-
+    //******************************************************************************
     @Override
     public void onEnable() {
         // Plugin startup logic
-        logInfo("FitzNet starting up.");
-        //getConfig().options().copyDefaults();
-        //saveDefaultConfig();
+        logInfo(ChatColor.RED + "FitzNet starting up.");
+        //Load file and copy on every reload
+        getConfig().options().copyDefaults();
+        //Saves file from above
+        saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
-        //verifyFiles();
-        getConfig();
+        verifyFiles();
 
     }
 
@@ -46,18 +41,13 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         // Plugin shutdown logic
         logInfo("FitzNet Shutting down gracefully...");
     }
+    //**********************METHODS*************************************************
 
     /**
      * Check the plugins own directory for files
      */
     private void verifyFiles() {
-        //Check if folder exists
-        File rootPluginDir = new File("plugins\\Fitz-NetHardcore");
-        //If the directory doesnt exist, create it and the config file.
-        if (!rootPluginDir.isDirectory()) {
-            if (rootPluginDir.mkdirs())
-                logInfo("Created Directory");
-        }
+
     }
 
 
