@@ -9,6 +9,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.IOException;
+
+import static org.fitznet.doomdns.fitznethardcore.Logging.logError;
 import static org.fitznet.doomdns.fitznethardcore.Logging.logInfo;
 
 public final class FitzNetHardcore extends JavaPlugin implements Listener {
@@ -26,7 +30,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        logInfo(ChatColor.RED + "FitzNet starting up.");
+        logInfo("FitzNet starting up.");
         //Load file and copy on every reload
         getConfig().options().copyDefaults();
         //Saves file from above
@@ -47,7 +51,24 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * Check the plugins own directory for files
      */
     private void verifyFiles() {
+        File livesDatabase = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
+        //Check if there is already a database. If not, create one.
+        if (!livesDatabase.exists()) {
+            logInfo("Writing blank database file \"livesDatabase.txt\".");
+            try {
+                if (livesDatabase.createNewFile()) {
+                    logInfo("livesDatabase.txt CREATED");
+                } else {
+                    logError("livesDatabase.txt NOT CREATED");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                logError(e.getMessage());
 
+            }
+        } else {
+            logInfo("Database file found.");
+        }
     }
 
 
@@ -64,9 +85,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         //COMMANDS
         //***************************
-        /**
-         * /fitznet Testing method only.
-         */
+        //Fitznet Testing method only.
         if (command.getName().equals("fitznet")) {
             //Must be a player only
             if (sender instanceof Player) {
@@ -78,9 +97,9 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 logInfo("Hello Server Master.");
         }
 
-        /**
-         * Returns the number of lives the player has
-         */
+
+        //Returns the number of lives the player has
+
         if (command.getName().equals("lives"))
             if (sender instanceof Player) {
                 Player player = (Player) sender;
