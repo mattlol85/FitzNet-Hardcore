@@ -1,3 +1,19 @@
+/**
+ * FITZ NET HARDCORE MODE
+ * ON first world join, 1 life only.
+ * <p>
+ * Every 8 in game hours, one life added.
+ * LifeCap total 3.
+ * <p>
+ * <p>
+ * To-Do List
+ * -Add scoreboard lives.
+ * -When 3 lives, the '3' is green, then '2' is yellow, and '1' red
+ * -Get a working onDeath listener
+ * -Detect no more lives and kick
+ * -Test and ensure database works well.
+ * -Future add afk check.
+ */
 //Matthew Fitzgerald Jan 19 2020
 package org.fitznet.doomdns.fitznethardcore;
 
@@ -5,27 +21,24 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
 
-import static org.fitznet.doomdns.fitznethardcore.Logging.logError;
-import static org.fitznet.doomdns.fitznethardcore.Logging.logInfo;
+import static org.fitznet.doomdns.fitznethardcore.Logging.*;
 
 public final class FitzNetHardcore extends JavaPlugin implements Listener {
+    private File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
+    private Map<String, Integer> liveDatabaseMap = new HashMap<>();
 
-    /**
-     * ON first world join, 1 life only.
-     * <p>
-     * Every 8 in game hours, one life added.
-     * <p>
-     * LifeCap total 10?
-     * <p>
-     * -Future add afk check.
-     */
     //******************************************************************************
     @Override
     public void onEnable() {
@@ -36,20 +49,34 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         //Saves file from above
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
+        //Create and check for database
         verifyFiles();
+        loadDatabase();
+    }
 
+    private void loadDatabase() {
+        try {
+            Scanner in = new Scanner(database);
+            while (in.hasNext()) {
+                liveDatabaseMap.put(in.next(), in.nextInt());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            logError(e.getMessage());
+        }
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         logInfo("FitzNet Shutting down gracefully...");
+        writeDatabase();
     }
+
     //**********************METHODS*************************************************
 
-    /**
-     * Check the plugins own directory for files
-     */
+
+    //Check the plugins own directory for files
     private void verifyFiles() {
         File livesDatabase = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
         //Check if there is already a database. If not, create one.
@@ -71,13 +98,38 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         }
     }
 
+    //*********Events**************************
 
-    public void onFirstJoin(PlayerJoinEvent e) {
-        if (!e.getPlayer().hasPlayedBefore()) {
-            Player newPlayer = e.getPlayer();
-            newPlayer.sendMessage(ChatColor.RED + "Welcome to Fitz-Net Hardcore!");
-            newPlayer.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.RED + getPlayerLives(newPlayer) + ChatColor.YELLOW + "lives.");
-            newPlayer.sendMessage(ChatColor.YELLOW + "Every 8 INGAME hours, you will gain 1 life.");
+    /**
+     * onJoin will preform multiple functions.
+     * <p>
+     * 1 - Check if the player is already in the database. If not, add them and play into prompt.
+     * 2 - ...Uhh man i forgot where this one was going
+     *
+     * @param p - Player join event.
+     */
+    @EventHandler
+    public void onJoin(PlayerJoinEvent p) {
+
+        //Get the new player Object
+        Player player = p.getPlayer();
+        logError(p.getPlayer() + " Joined");
+        //Check if player is in database
+        if (exists(player)) {
+            //Say welcome back or something, make a nice picture idk.
+            logInfo("PLAYER EXISTS IN DATABASE");
+        } else {
+            logInfo("PLAYER DOESNT EXIST IN DATABASE");
+            initWritePlayer(player);
+        }
+
+    }
+
+    public void onPlayerDeath(PlayerDeathEvent p) {
+        if (p.getEntity().getPlayer() != null) {
+            Player deadPlayer = p.getEntity().getPlayer();
+            //REMOVE LIFE FROM PLAYER
+            removeLife(deadPlayer);
         }
     }
 
@@ -100,7 +152,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
         //Returns the number of lives the player has
 
-        if (command.getName().equals("lives"))
+        if (command.getName().equals("lives")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 player.sendMessage(ChatColor.RED + player.getName() + "... you have " + getPlayerLives(player) + " lives!");
@@ -108,11 +160,106 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
             } else {
                 logInfo("This command cannot be used on Console.");
             }
-
+        }
+        if (command.getName().equals("addlife")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                //Add one life
+                addLife(player);
+            }
+        }
         return false;
     }
 
     private int getPlayerLives(Player player) {
-        return 5;
+        return liveDatabaseMap.get(player.getName());
+    }
+    // DATABASE METHODS
+
+    /**
+     * exists -  checks the database and checks if there is any matching usernames.
+     * If so it will return true, else false.
+     *
+     * @param p - Player
+     * @return true IF found in database
+     */
+    private boolean exists(Player p) {
+        try {
+            Scanner databaseIn = new Scanner(database);
+            while (databaseIn.hasNext()) {
+                if (databaseIn.next().matches(p.getName()))
+                    return true;
+            }
+            databaseIn.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            logError(e.getMessage());
+        }
+        return false;
+    }
+
+    /**
+     * Inital writing of new player
+     *
+     * @param p - Player that just joined the server.
+     */
+    private void initWritePlayer(Player p) {
+        addLife(p);
+        writeDatabase();
+    }
+
+    //Remove one life
+    private void removeLife(Player p) {
+        liveDatabaseMap.put(p.getName(), (liveDatabaseMap.get(p.getName()) - 1));
+        writeDatabase();
+        //TODO Check if user is at 0 hearts then ban from server
+        if (liveDatabaseMap.get(p.getName()) == 0)
+            fitzNetSmiteThisFoolForDying(p);
+
+
+    }
+
+    //Add one life
+    private void addLife(Player p) {
+        liveDatabaseMap.put(p.getName(), (liveDatabaseMap.get(p.getName()) + 1));
+        writeDatabase();
+    }
+
+    //Add life with param
+    private void addLife(Player p, int lives) {
+        int oldLives = liveDatabaseMap.get(p.getName());
+        liveDatabaseMap.put(p.getName(), (oldLives + lives));
+        writeDatabase();
+    }
+
+    //Ban from server. Blow them up, do something.
+    private void fitzNetSmiteThisFoolForDying(Player player) {
+        //Do something grate mate :)
+
+    }
+
+    /**
+     * TODO write method comment
+     */
+    private void writeDatabase() {
+        try {
+            PrintWriter pw = new PrintWriter(database);
+            Set setOfKeys = liveDatabaseMap.keySet();
+            //Get iterator for map
+            Iterator iter = setOfKeys.iterator();
+            while (iter.hasNext()) {
+                //Write value to txt file
+                String key = (String) iter.next();
+                Integer val = liveDatabaseMap.get(key);
+                logInfo("Logging player.");
+                logInfo(key + "\t" + val);
+                pw.println(key + "\t" + val);
+                pw.flush();
+            }
+            pw.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }
