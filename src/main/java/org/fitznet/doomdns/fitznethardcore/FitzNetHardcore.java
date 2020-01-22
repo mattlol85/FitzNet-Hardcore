@@ -36,8 +36,9 @@ import java.util.*;
 import static org.fitznet.doomdns.fitznethardcore.Logging.*;
 
 public final class FitzNetHardcore extends JavaPlugin implements Listener {
+
     private File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
-    private Map<String, Integer> liveDatabaseMap = new HashMap<>();
+    private ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
 
     //******************************************************************************
     @Override
@@ -58,7 +59,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         try {
             Scanner in = new Scanner(database);
             while (in.hasNext()) {
-                liveDatabaseMap.put(in.next(), in.nextInt());
+                hardcorePlayerList.add(new HardcorePlayer(in.next(), in.nextInt()));
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -113,7 +114,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
         //Get the new player Object
         Player player = p.getPlayer();
-        logError(p.getPlayer() + " Joined");
+        logInfo(p.getPlayer() + " Join Event Trigger.");
         //Check if player is in database
         if (exists(player)) {
             //Say welcome back or something, make a nice picture idk.
@@ -168,11 +169,23 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 addLife(player);
             }
         }
+        if (command.getName().equals("sublife")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                //Add one life
+                removeLife(player);
+            }
+        }
         return false;
     }
 
     private int getPlayerLives(Player player) {
-        return liveDatabaseMap.get(player.getName());
+        for (int i = 0; i < hardcorePlayerList.size(); i++) {
+            if (player.getName().matches(hardcorePlayerList.get(i).getUsername())) {
+                return hardcorePlayerList.get(i).getLives();
+            }
+        }
+        return -100;
     }
     // DATABASE METHODS
 
@@ -187,8 +200,9 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         try {
             Scanner databaseIn = new Scanner(database);
             while (databaseIn.hasNext()) {
-                if (databaseIn.next().matches(p.getName()))
+                if (databaseIn.next().matches(p.getName())) {
                     return true;
+                }
             }
             databaseIn.close();
         } catch (FileNotFoundException e) {
@@ -204,31 +218,32 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @param p - Player that just joined the server.
      */
     private void initWritePlayer(Player p) {
-        addLife(p);
+        //TODO add something for new players here.
+        hardcorePlayerList.add(new HardcorePlayer(p.getDisplayName()));
         writeDatabase();
     }
 
     //Remove one life
     private void removeLife(Player p) {
-        liveDatabaseMap.put(p.getName(), (liveDatabaseMap.get(p.getName()) - 1));
+        getHardcorePlayer(p).removeLife();
         writeDatabase();
         //TODO Check if user is at 0 hearts then ban from server
-        if (liveDatabaseMap.get(p.getName()) == 0)
-            fitzNetSmiteThisFoolForDying(p);
-
-
     }
 
+    //Give em one life
+    private void addNewPlayer(Player p) {
+        hardcorePlayerList.add(new HardcorePlayer(p.getDisplayName()));
+        writeDatabase();
+    }
     //Add one life
     private void addLife(Player p) {
-        liveDatabaseMap.put(p.getName(), (liveDatabaseMap.get(p.getName()) + 1));
+        //TODO get something here
         writeDatabase();
     }
 
     //Add life with param
     private void addLife(Player p, int lives) {
-        int oldLives = liveDatabaseMap.get(p.getName());
-        liveDatabaseMap.put(p.getName(), (oldLives + lives));
+        getHardcorePlayer(p).addLife();
         writeDatabase();
     }
 
@@ -239,21 +254,31 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     }
 
     /**
+     * HardcorePlayer - Returns a HardcorePlayer if there is one in the database
+     *
+     * @param player
+     * @return
+     */
+    public HardcorePlayer getHardcorePlayer(Player player) {
+        for (int i = 0; i < hardcorePlayerList.size(); i++) {
+            if (player.getName().matches(hardcorePlayerList.get(i).getUsername()))
+                return hardcorePlayerList.get(i);
+        }
+        return null;
+    }
+
+    /**
      * TODO write method comment
      */
     private void writeDatabase() {
         try {
             PrintWriter pw = new PrintWriter(database);
-            Set setOfKeys = liveDatabaseMap.keySet();
-            //Get iterator for map
-            Iterator iter = setOfKeys.iterator();
-            while (iter.hasNext()) {
+
+            for (int i = 0; i < hardcorePlayerList.size(); i++) {
                 //Write value to txt file
-                String key = (String) iter.next();
-                Integer val = liveDatabaseMap.get(key);
                 logInfo("Logging player.");
-                logInfo(key + "\t" + val);
-                pw.println(key + "\t" + val);
+                logInfo(hardcorePlayerList.get(i).getUsername() + "\t" + hardcorePlayerList.get(i).getLives());
+                pw.println(hardcorePlayerList.get(i).getUsername() + "\t" + hardcorePlayerList.get(i).getLives());
                 pw.flush();
             }
             pw.close();
