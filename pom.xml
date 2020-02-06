@@ -6,7 +6,7 @@
 
     <groupId>org.fitznet.doomdns</groupId>
     <artifactId>Fitz-NetHardcore</artifactId>
-    <version>1.5.1-SNAPSHOT</version>
+    <version>1.15.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Fitz NetHardcore</name>

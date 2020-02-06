@@ -36,15 +36,8 @@ public class HardcorePlayer {
         lives++;
     }
 
-    public void addLife(int livesToAdd) {
-        lives += livesToAdd;
-    }
-
     public void removeLife() {
         lives--;
     }
 
-    public void removeLife(int livesToRemove) {
-        lives -= livesToRemove;
-    }
 }

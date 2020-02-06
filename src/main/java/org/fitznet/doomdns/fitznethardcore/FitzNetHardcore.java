@@ -9,7 +9,6 @@
  * To-Do List
  * -Add scoreboard lives.
  * -When 3 lives, the '3' is green, then '2' is yellow, and '1' red
- * -Get a working onDeath listener
  * -Detect no more lives and kick
  * -Test and ensure database works well.
  * -Future add afk check.
@@ -41,6 +40,10 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     private ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
 
     //******************************************************************************
+
+    /**
+     *
+     */
     @Override
     public void onEnable() {
         // Plugin startup logic
@@ -78,6 +81,11 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
 
     //Check the plugins own directory for files
+
+    /**
+     * verifyFiles() - This checks the Plugins/Fitz-NetHardcore/ directory to see if
+     * a database file is present. If not, create a blank database.
+     */
     private void verifyFiles() {
         File livesDatabase = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
         //Check if there is already a database. If not, create one.
@@ -103,6 +111,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
     /**
      * onJoin will preform multiple functions.
+     * TODO comment?
      * <p>
      * 1 - Check if the player is already in the database. If not, add them and play into prompt.
      * 2 - ...Uhh man i forgot where this one was going
@@ -126,15 +135,26 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
     }
 
-    public void onPlayerDeath(PlayerDeathEvent p) {
-        if (p.getEntity().getPlayer() != null) {
-            Player deadPlayer = p.getEntity().getPlayer();
-            //REMOVE LIFE FROM PLAYER
-            removeLife(deadPlayer);
-        }
+    @EventHandler
+    /**
+     * onPlayerDeath() - Detect an instance where a player death occured.
+     *
+     * @param e - Entity that died
+     */
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        Player deadPlayer = e.getEntity().getPlayer();
+        //REMOVE LIFE FROM PLAYER
+        removeLife(deadPlayer);
+        //DISRESPECT THE PLAYER
+        deadPlayer.getWorld().strikeLightningEffect(deadPlayer.getLocation());
+        deadPlayer.sendMessage(ChatColor.YELLOW + "Removing one life !");
     }
 
     @Override
+    /**
+     * onCommand - Sets commands for the server
+     *
+     */
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         //COMMANDS
         //***************************
@@ -162,6 +182,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 logInfo("This command cannot be used on Console.");
             }
         }
+        //Add one life to player
         if (command.getName().equals("addlife")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
@@ -169,11 +190,26 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 addLife(player);
             }
         }
+        //Remove one life from player
         if (command.getName().equals("sublife")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                //Add one life
+                //Subtract one life
                 removeLife(player);
+            }
+        }
+
+        //Print out list of players and
+        if (command.getName().equals("fndebug")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                for (int i = 0; i < hardcorePlayerList.size(); i++) {
+                    player.sendMessage(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
+                }
+            } else {
+                for (int i = 0; i < hardcorePlayerList.size(); i++) {
+                    logInfo(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
+                }
             }
         }
         return false;
@@ -227,6 +263,9 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     private void removeLife(Player p) {
         getHardcorePlayer(p).removeLife();
         writeDatabase();
+        if (getHardcorePlayer(p).getLives() == 0) {
+            p.sendMessage(ChatColor.RED + "You are going to be banned !");
+        }
         //TODO Check if user is at 0 hearts then ban from server
     }
 
@@ -235,14 +274,10 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         hardcorePlayerList.add(new HardcorePlayer(p.getDisplayName()));
         writeDatabase();
     }
+
     //Add one life
     private void addLife(Player p) {
         //TODO get something here
-        writeDatabase();
-    }
-
-    //Add life with param
-    private void addLife(Player p, int lives) {
         getHardcorePlayer(p).addLife();
         writeDatabase();
     }
@@ -260,9 +295,9 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @return
      */
     public HardcorePlayer getHardcorePlayer(Player player) {
-        for (int i = 0; i < hardcorePlayerList.size(); i++) {
-            if (player.getName().matches(hardcorePlayerList.get(i).getUsername()))
-                return hardcorePlayerList.get(i);
+        for (HardcorePlayer hardcorePlayer : hardcorePlayerList) {
+            if (player.getName().matches(hardcorePlayer.getUsername()))
+                return hardcorePlayer;
         }
         return null;
     }
@@ -274,11 +309,11 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         try {
             PrintWriter pw = new PrintWriter(database);
 
-            for (int i = 0; i < hardcorePlayerList.size(); i++) {
+            for (HardcorePlayer hardcorePlayer : hardcorePlayerList) {
                 //Write value to txt file
                 logInfo("Logging player.");
-                logInfo(hardcorePlayerList.get(i).getUsername() + "\t" + hardcorePlayerList.get(i).getLives());
-                pw.println(hardcorePlayerList.get(i).getUsername() + "\t" + hardcorePlayerList.get(i).getLives());
+                logInfo(hardcorePlayer.getUsername() + "\t" + hardcorePlayer.getLives());
+                pw.println(hardcorePlayer.getUsername() + "\t" + hardcorePlayer.getLives());
                 pw.flush();
             }
             pw.close();
