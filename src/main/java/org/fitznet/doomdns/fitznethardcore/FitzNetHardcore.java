@@ -215,18 +215,26 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         return false;
     }
 
+    /**
+     * getPlayerLives() - iterates through the hardcorePlayerList and
+     * checks if the username matches the one stored in the database. Reutrns -85 as error
+     * code.
+     *
+     * @param player - In game player.
+     * @return - Amount of lives a player has. || -85
+     */
     private int getPlayerLives(Player player) {
         for (int i = 0; i < hardcorePlayerList.size(); i++) {
             if (player.getName().matches(hardcorePlayerList.get(i).getUsername())) {
                 return hardcorePlayerList.get(i).getLives();
             }
         }
-        return -100;
+        return -85;
     }
     // DATABASE METHODS
 
     /**
-     * exists -  checks the database and checks if there is any matching usernames.
+     * exists() -  checks the database and checks if there is any matching usernames.
      * If so it will return true, else false.
      *
      * @param p - Player
@@ -303,8 +311,12 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     }
 
     /**
-     * TODO write method comment
+     * writeDatabase - Iterates though the hardcorePlayerList arraylist and logs each player in the console.
+     * <p>
+     *     This method also prints this to the database.
+     * </p>
      */
+    //TODO something seems very inefficient over here...
     private void writeDatabase() {
         try {
             PrintWriter pw = new PrintWriter(database);
@@ -322,4 +334,5 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         }
 
     }
+
 }
