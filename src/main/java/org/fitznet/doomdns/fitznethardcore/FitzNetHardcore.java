@@ -16,6 +16,8 @@
 //Matthew Fitzgerald Jan 19 2020
 package org.fitznet.doomdns.fitznethardcore;
 
+import org.bukkit.BanList;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -273,6 +275,8 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         writeDatabase();
         if (getHardcorePlayer(p).getLives() == 0) {
             p.sendMessage(ChatColor.RED + "You are going to be banned !");
+            Bukkit.getBanList(BanList.Type.NAME).addBan(p.getName(), ChatColor.RED + "You are out of lives! Permanently Banned!!!", null, "Out of lives! :(");
+            p.kickPlayer("Out of lives :(. You are now Banned.");
         }
         //TODO Check if user is at 0 hearts then ban from server
     }
@@ -299,8 +303,8 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     /**
      * HardcorePlayer - Returns a HardcorePlayer if there is one in the database
      *
-     * @param player
-     * @return
+     * @param player - This is a player
+     * @return hardcorePlayer - A hardcore player object
      */
     public HardcorePlayer getHardcorePlayer(Player player) {
         for (HardcorePlayer hardcorePlayer : hardcorePlayerList) {
