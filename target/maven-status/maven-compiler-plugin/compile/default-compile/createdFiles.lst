@@ -1,0 +1,5 @@
+org/fitznet/doomdns/fitznethardcore/Logging.class
+org/fitznet/doomdns/fitznethardcore/FitzNetHardcore.class
+org/fitznet/doomdns/fitznethardcore/HardcorePlayer.class
+org/fitznet/doomdns/fitznethardcore/LivesScoreboard.class
+org/fitznet/doomdns/fitznethardcore/EventManager.class

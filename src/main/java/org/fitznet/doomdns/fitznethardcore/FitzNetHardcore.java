@@ -38,8 +38,8 @@ import static org.fitznet.doomdns.fitznethardcore.Logging.*;
 
 public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
-    private File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
-    private ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
+    private final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
+    private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
 
     //******************************************************************************
 
@@ -60,27 +60,28 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         loadDatabase();
     }
 
-    private void loadDatabase() {
-        try {
-            Scanner in = new Scanner(database);
-            while (in.hasNext()) {
-                hardcorePlayerList.add(new HardcorePlayer(in.next(), in.nextInt()));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            logError(e.getMessage());
-        }
-    }
-
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        logInfo("FitzNet Shutting down gracefully...");
+        logInfo("FitzNet Shutting down gracefully.");
         writeDatabase();
     }
 
     //**********************METHODS*************************************************
 
+
+    private void loadDatabase() {
+        try {
+            final Scanner in = new Scanner(database);
+            while (in.hasNext()) {
+                hardcorePlayerList.add(new HardcorePlayer(in.next(), in.nextInt()));
+            }
+            in.close();
+        } catch (final FileNotFoundException e) {
+            e.printStackTrace();
+            logError(e.getMessage());
+        }
+    }
 
     //Check the plugins own directory for files
 
@@ -89,7 +90,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * a database file is present. If not, create a blank database.
      */
     private void verifyFiles() {
-        File livesDatabase = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
+        final File livesDatabase = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
         //Check if there is already a database. If not, create one.
         if (!livesDatabase.exists()) {
             logInfo("Writing blank database file \"livesDatabase.txt\".");
@@ -99,7 +100,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 } else {
                     logError("livesDatabase.txt NOT CREATED");
                 }
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
                 logError(e.getMessage());
 
@@ -121,10 +122,10 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @param p - Player join event.
      */
     @EventHandler
-    public void onJoin(PlayerJoinEvent p) {
+    public void onJoin(final PlayerJoinEvent p) {
 
         //Get the new player Object
-        Player player = p.getPlayer();
+        final Player player = p.getPlayer();
         logInfo(p.getPlayer() + " Join Event Trigger.");
         //Check if player is in database
         if (exists(player)) {
@@ -143,8 +144,8 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      *
      * @param e - Entity that died
      */
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        Player deadPlayer = e.getEntity().getPlayer();
+    public void onPlayerDeath(final PlayerDeathEvent e) {
+        final Player deadPlayer = e.getEntity().getPlayer();
         //REMOVE LIFE FROM PLAYER
         removeLife(deadPlayer);
         //DISRESPECT THE PLAYER
@@ -157,14 +158,14 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * onCommand - Sets commands for the server
      *
      */
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command command, final String label, final String[] args) {
         //COMMANDS
         //***************************
         //Fitznet Testing method only.
         if (command.getName().equals("fitznet")) {
             //Must be a player only
             if (sender instanceof Player) {
-                Player player = (Player) sender;
+                final Player player = (Player) sender;
                 player.sendMessage("FitzNet Commands");
                 //   player.giveExp(10);
             } else
@@ -177,7 +178,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
         if (command.getName().equals("lives")) {
             if (sender instanceof Player) {
-                Player player = (Player) sender;
+                final Player player = (Player) sender;
                 player.sendMessage(ChatColor.RED + player.getName() + "... you have " + getPlayerLives(player) + " lives!");
 
             } else {
@@ -187,7 +188,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         //Add one life to player
         if (command.getName().equals("addlife")) {
             if (sender instanceof Player) {
-                Player player = (Player) sender;
+                final Player player = (Player) sender;
                 //Add one life
                 addLife(player);
             }
@@ -195,7 +196,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         //Remove one life from player
         if (command.getName().equals("sublife")) {
             if (sender instanceof Player) {
-                Player player = (Player) sender;
+                final Player player = (Player) sender;
                 //Subtract one life
                 removeLife(player);
             }
@@ -204,7 +205,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         //Print out list of players and
         if (command.getName().equals("fndebug")) {
             if (sender instanceof Player) {
-                Player player = (Player) sender;
+                final Player player = (Player) sender;
                 for (int i = 0; i < hardcorePlayerList.size(); i++) {
                     player.sendMessage(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
                 }
@@ -225,7 +226,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @param player - In game player.
      * @return - Amount of lives a player has. || -85
      */
-    private int getPlayerLives(Player player) {
+    private int getPlayerLives(final Player player) {
         for (int i = 0; i < hardcorePlayerList.size(); i++) {
             if (player.getName().matches(hardcorePlayerList.get(i).getUsername())) {
                 return hardcorePlayerList.get(i).getLives();
@@ -242,16 +243,17 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @param p - Player
      * @return true IF found in database
      */
-    private boolean exists(Player p) {
+    private boolean exists(final Player p) {
         try {
-            Scanner databaseIn = new Scanner(database);
+            final Scanner databaseIn = new Scanner(database);
             while (databaseIn.hasNext()) {
                 if (databaseIn.next().matches(p.getName())) {
+                    databaseIn.close();
                     return true;
                 }
             }
             databaseIn.close();
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
             logError(e.getMessage());
         }
@@ -263,14 +265,14 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      *
      * @param p - Player that just joined the server.
      */
-    private void initWritePlayer(Player p) {
+    private void initWritePlayer(final Player p) {
         //TODO add something for new players here.
         hardcorePlayerList.add(new HardcorePlayer(p.getDisplayName()));
         writeDatabase();
     }
 
     //Remove one life
-    private void removeLife(Player p) {
+    private void removeLife(final Player p) {
         getHardcorePlayer(p).removeLife();
         writeDatabase();
         if (getHardcorePlayer(p).getLives() == 0) {
@@ -282,23 +284,27 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     }
 
     //Give em one life
-    private void addNewPlayer(Player p) {
+    /*
+    private void addNewPlayer(final Player p) {
         hardcorePlayerList.add(new HardcorePlayer(p.getDisplayName()));
         writeDatabase();
     }
+    */
+    //Add one life unless at MaxLives
+    private void addLife(final Player p) {
+        HardcorePlayer hcp = new HardcorePlayer(p.getDisplayName());
+        // IF player has less than max_lives, add one
+        if(getHardcorePlayer(p).getLives() < getConfig().getInt("MaxLives"))
+        hcp.addLife();
 
-    //Add one life
-    private void addLife(Player p) {
-        //TODO get something here
-        getHardcorePlayer(p).addLife();
         writeDatabase();
     }
 
     //Ban from server. Blow them up, do something.
-    private void fitzNetSmiteThisFoolForDying(Player player) {
+    //private void fitzNetSmiteThisFoolForDying(final Player player) {
         //Do something grate mate :)
 
-    }
+    //}
 
     /**
      * HardcorePlayer - Returns a HardcorePlayer if there is one in the database
@@ -306,8 +312,8 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @param player - This is a player
      * @return hardcorePlayer - A hardcore player object
      */
-    public HardcorePlayer getHardcorePlayer(Player player) {
-        for (HardcorePlayer hardcorePlayer : hardcorePlayerList) {
+    public HardcorePlayer getHardcorePlayer(final Player player) {
+        for (final HardcorePlayer hardcorePlayer : hardcorePlayerList) {
             if (player.getName().matches(hardcorePlayer.getUsername()))
                 return hardcorePlayer;
         }
@@ -323,9 +329,9 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     //TODO something seems very inefficient over here...
     private void writeDatabase() {
         try {
-            PrintWriter pw = new PrintWriter(database);
+            final PrintWriter pw = new PrintWriter(database);
 
-            for (HardcorePlayer hardcorePlayer : hardcorePlayerList) {
+            for (final HardcorePlayer hardcorePlayer : hardcorePlayerList) {
                 //Write value to txt file
                 logInfo("Logging player.");
                 logInfo(hardcorePlayer.getUsername() + "\t" + hardcorePlayer.getLives());
@@ -333,7 +339,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 pw.flush();
             }
             pw.close();
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
 
