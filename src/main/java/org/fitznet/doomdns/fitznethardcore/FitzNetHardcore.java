@@ -114,7 +114,6 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
     /**
      * onJoin will preform multiple functions.
-     * TODO comment?
      * <p>
      * 1 - Check if the player is already in the database. If not, add them and play into prompt.
      * 2 - ...Uhh man i forgot where this one was going
@@ -266,7 +265,6 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @param p - Player that just joined the server.
      */
     private void initWritePlayer(final Player p) {
-        //TODO add something for new players here.
         hardcorePlayerList.add(new HardcorePlayer(p.getDisplayName()));
         writeDatabase();
     }
@@ -280,7 +278,6 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
             Bukkit.getBanList(BanList.Type.NAME).addBan(p.getName(), ChatColor.RED + "You are out of lives! Permanently Banned!!!", null, "Out of lives! :(");
             p.kickPlayer("Out of lives :(. You are now Banned.");
         }
-        //TODO Check if user is at 0 hearts then ban from server
     }
 
     //Give em one life
@@ -326,7 +323,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      *     This method also prints this to the database.
      * </p>
      */
-    //TODO something seems very inefficient over here...
+    //TODO Redesign and change main database storage
     private void writeDatabase() {
         try {
             final PrintWriter pw = new PrintWriter(database);
