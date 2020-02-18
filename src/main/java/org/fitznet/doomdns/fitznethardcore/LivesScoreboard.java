@@ -1,5 +1,10 @@
 package org.fitznet.doomdns.fitznethardcore;
 
-public class LivesScoreboard {
+import org.bukkit.plugin.java.JavaPlugin;
 
+public class LivesScoreboard {
+    JavaPlugin fnhc;
+
+    void testMethod(){
+    }
 }
