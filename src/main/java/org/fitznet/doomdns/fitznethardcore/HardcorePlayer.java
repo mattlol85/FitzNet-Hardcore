@@ -1,6 +1,7 @@
 package org.fitznet.doomdns.fitznethardcore;
 
 public class HardcorePlayer {
+    
     private int lives = 1;
     private String username;
 

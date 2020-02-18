@@ -38,7 +38,7 @@ import static org.fitznet.doomdns.fitznethardcore.Logging.*;
 
 public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
-    private final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
+    public final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
     private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
 
     //******************************************************************************
@@ -58,6 +58,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         //Create and check for database
         verifyFiles();
         loadDatabase();
+        
     }
 
     @Override
