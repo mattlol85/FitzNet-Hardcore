@@ -1,0 +1,23 @@
+name: Fitz-NetHardcore
+version: 1.15.2-SNAPSHOT
+main: org.fitznet.doomdns.fitznethardcore.FitzNetHardcore
+api-version: 1.15
+authors: [MatthewFitzgerald]
+description: Hardcore mod. Gives lives and regen.
+website: fitznet.doomdns.org
+commands:
+  fitznet:
+    description: Testing method.
+    usage: /<command>
+  lives:
+    description: Display how many lives you have left.
+    usage: /<command>
+  addlife:
+    description: Add one life.
+    usage: /addlife
+  sublife:
+    description: Remove one life.
+    usage: /<command>
+  fndebug:
+    description: Show ALL players lives in the database.
+    usage: /<command>

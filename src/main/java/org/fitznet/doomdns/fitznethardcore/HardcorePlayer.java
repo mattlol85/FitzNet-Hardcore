@@ -1,9 +1,8 @@
 package org.fitznet.doomdns.fitznethardcore;
 
-
 public class HardcorePlayer {
-    int lives = 1;
-    String username;
+    private int lives = 1;
+    private String username;
 
     //Used to create new players
     public HardcorePlayer(String username) {
@@ -16,6 +15,7 @@ public class HardcorePlayer {
         this.lives = lives;
     }
 
+    //Setters & Getters
     public int getLives() {
         return lives;
     }
@@ -32,6 +32,7 @@ public class HardcorePlayer {
         this.username = username;
     }
 
+    //Object Methods
     public void addLife() {
         lives++;
     }
