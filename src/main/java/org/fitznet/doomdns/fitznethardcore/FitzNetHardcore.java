@@ -323,7 +323,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      *     This method also prints this to the database.
      * </p>
      */
-    //TODO Redesign and change main database storage
+    //TODO Redesign and change main database storage to hashmap
     private void writeDatabase() {
         try {
             final PrintWriter pw = new PrintWriter(database);
