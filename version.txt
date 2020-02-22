@@ -1,0 +1,5 @@
+[1mApache Maven 3.6.0[m
+Maven home: /usr/share/maven
+Java version: 11.0.6, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "4.15.0-76-generic", arch: "amd64", family: "unix"
