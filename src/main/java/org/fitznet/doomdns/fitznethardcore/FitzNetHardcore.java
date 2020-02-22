@@ -27,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,6 +41,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
     public final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
     private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
+    //private final HashMap<HardcorePlayer,Player> hardcorePlayerList = new HashMap<>();
 
     //******************************************************************************
 
@@ -48,6 +50,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      */
     @Override
     public void onEnable() {
+
         // Plugin startup logic
         logInfo("FitzNet starting up.");
         //Load file and copy on every reload
@@ -58,6 +61,9 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         //Create and check for database
         verifyFiles();
         loadDatabase();
+
+        BukkitTask mainSch = new Scheduler(this).runTaskTimer(this, 40L, 40L);
+
         
     }
 
