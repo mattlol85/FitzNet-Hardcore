@@ -1,11 +1,12 @@
 #!/bin/sh
 #Matthew Fitzgerald 2020
+#Alexander Aguilar 2020
 
 ## CHANGE THESE
 ## Directory to Development Server
-SERVER_PATH='/home/matt/Desktop/DevServer'
+SERVER_PATH=''
 ## Plugin Source File
-PLUGIN_PATH='/home/matt/Desktop/FitzNet-Hardcore'
+PLUGIN_PATH=''
 # Remove old files (Clean)
 cd $SERVER_PATH
 
@@ -20,7 +21,7 @@ cd $PLUGIN_PATH
 mvn
 
 # Add new jar into file
-cp $PLUGIN_PATH/target/Fitz-NetHardcore-1.15.2-SNAPSHOT.jar /home/matt/Desktop/DevServer/plugins/ 
+cp $PLUGIN_PATH/target/Fitz-NetHardcore-1.15.2-SNAPSHOT.jar $PLUGIN_PATH/plugins/ 
 
 # Run Server
 cd $SERVER_PATH
