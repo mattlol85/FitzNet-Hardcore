@@ -217,7 +217,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 final Player player = (Player) sender;
                 
                 for(String lives : playerMap.keySet()){
-
+                    player.sendMessage(message);
                 }
 
 
