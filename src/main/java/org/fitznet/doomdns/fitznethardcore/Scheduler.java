@@ -13,6 +13,6 @@ public class Scheduler extends BukkitRunnable {
     @Override
     public void run(){
         //TODO Create method to check current player time.
-        System.out.println("Task has ran.");
+        //System.out.println("Task has ran.");
     }
 }
