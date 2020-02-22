@@ -40,8 +40,8 @@ import static org.fitznet.doomdns.fitznethardcore.Logging.*;
 public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
     public final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
-    private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
-    //private final HashMap<HardcorePlayer,Player> hardcorePlayerList = new HashMap<>();
+    //private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
+    private final HashMap<String,Integer> playerMap = new HashMap<>();
 
     //******************************************************************************
 
@@ -61,9 +61,12 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         //Create and check for database
         verifyFiles();
         loadDatabase();
-
-        BukkitTask mainSch = new Scheduler(this).runTaskTimer(this, 40L, 40L);
-
+        // One Second = 20 Ticks
+        // One Min = 1200 Ticks
+        // Every 24 Mins (Every Minecraft Day)
+        //BukkitTask mainSch = new Scheduler(this).runTaskTimer(this, 0L, 28800L);
+        //Test call to speed things up Every 5 seconds
+        BukkitTask mainSch = new LivesScheduler(this).runTaskTimer(this, 0L, 10L);
         
     }
 
@@ -81,7 +84,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         try {
             final Scanner in = new Scanner(database);
             while (in.hasNext()) {
-                hardcorePlayerList.add(new HardcorePlayer(in.next(), in.nextInt()));
+                playerMap.put(in.next(), in.nextInt());
             }
             in.close();
         } catch (final FileNotFoundException e) {
@@ -212,17 +215,26 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         if (command.getName().equals("fndebug")) {
             if (sender instanceof Player) {
                 final Player player = (Player) sender;
-                for (int i = 0; i < hardcorePlayerList.size(); i++) {
-                    player.sendMessage(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
+                
+                for(String lives : playerMap.keySet()){
+
                 }
-            } else {
-                for (int i = 0; i < hardcorePlayerList.size(); i++) {
-                    logInfo(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
-                }
-            }
+
+
+
+            //     for (int i = 0; i < hardcorePlayerList.size(); i++) {
+            //         player.sendMessage(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
+            //     }
+            // } else {
+            //     for (int i = 0; i < hardcorePlayerList.size(); i++) {
+            //         logInfo(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
+            //     }
+                
+            // }
         }
         return false;
-    }
+        
+ 
 
     /**
      * getPlayerLives() - iterates through the hardcorePlayerList and

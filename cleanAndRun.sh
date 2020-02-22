@@ -4,9 +4,9 @@
 
 ## CHANGE THESE
 ## Directory to Development Server
-SERVER_PATH=''
+SERVER_PATH='~/Desktop/DevServer'
 ## Plugin Source File
-PLUGIN_PATH=''
+PLUGIN_PATH='~/Desktop/FitzNetHardcore'
 # Remove old files (Clean)
 cd $SERVER_PATH
 

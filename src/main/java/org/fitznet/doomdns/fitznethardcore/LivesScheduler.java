@@ -1,18 +1,20 @@
 package org.fitznet.doomdns.fitznethardcore;
 
+import java.util.HashMap;
+
 import org.bukkit.scheduler.BukkitRunnable;
 
-public class Scheduler extends BukkitRunnable {
+public class LivesScheduler extends BukkitRunnable {
 
     FitzNetHardcore plugin;
 
-    public Scheduler(FitzNetHardcore plugin){
+    public LivesScheduler(FitzNetHardcore plugin){
         this.plugin = plugin;
     }
+    
 
     @Override
     public void run(){
         //TODO Create method to check current player time.
-        System.out.println("Task has ran.");
     }
 }
