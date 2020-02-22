@@ -17,13 +17,11 @@ rm -r Fitz*
 
 # Maven Compile
 cd $PLUGIN_PATH
-
 mvn
 
 # Add new jar into file
 cp $PLUGIN_PATH/target/Fitz-NetHardcore-1.15.2-SNAPSHOT.jar /home/matt/Desktop/DevServer/plugins/ 
 
-cd $SERVER_PATH
-
 # Run Server
-java -jar spigot.jar
+cd $SERVER_PATH
+java -jar spigot.jar nogui
