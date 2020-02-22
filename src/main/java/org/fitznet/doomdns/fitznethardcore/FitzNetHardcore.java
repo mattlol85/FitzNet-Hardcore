@@ -39,7 +39,7 @@ import static org.fitznet.doomdns.fitznethardcore.Logging.*;
 
 public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
-    public final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
+    public final File database = new File(getDataFolder().getAbsolutePath() + "/livesDatabase.txt");
     private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
     //private final HashMap<HardcorePlayer,Player> hardcorePlayerList = new HashMap<>();
 
@@ -93,11 +93,11 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     //Check the plugins own directory for files
 
     /**
-     * verifyFiles() - This checks the Plugins/Fitz-NetHardcore/ directory to see if
+     * verifyFiles() - This checks the plugins/Fitz-NetHardcore/ directory to see if
      * a database file is present. If not, create a blank database.
      */
     private void verifyFiles() {
-        final File livesDatabase = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
+        final File livesDatabase = new File(getDataFolder().getAbsolutePath() + "/livesDatabase.txt");
         //Check if there is already a database. If not, create one.
         if (!livesDatabase.exists()) {
             logInfo("Writing blank database file \"livesDatabase.txt\".");
