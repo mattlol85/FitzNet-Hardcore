@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class DatabaseManager {
     FitzNetHardcore plugin;
-    static final File folder = new File("plugins/Fitz-NetHardcore/PlayerData");
+    static final File folder = new File("plugins/Fitz-NetHardcore/PlayerData//");
     ArrayList<JSONObject> playerJsonFiles = new ArrayList<>();
 
     public DatabaseManager(FitzNetHardcore plugin) {
@@ -32,9 +32,9 @@ public class DatabaseManager {
 
     public static void createCustomConfig(Player player) {
         FileConfiguration configFile = null;
-        File playerFile = new File(folder + player.getUniqueId().toString());
+        File playerFile = new File(folder , player.getUniqueId().toString()+ ".yml");
         try {
-            Logger.logDebug(folder.getPath() + player.getUniqueId().toString());
+            Logger.logDebug(folder + player.getUniqueId().toString()+".yml");
             playerFile.createNewFile();
             configFile = YamlConfiguration.loadConfiguration(playerFile);
             configFile.addDefault("Name", player.getDisplayName());
