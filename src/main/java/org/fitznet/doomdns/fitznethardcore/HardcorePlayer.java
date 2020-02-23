@@ -8,7 +8,7 @@ public class HardcorePlayer {
     private String username;
     private int lifeTime; 
     private Player player;
-
+    private String uuid;
     /**
      * Creates a new HardcorePlayer with the given username
      * @param username Username to set

@@ -22,10 +22,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -35,10 +31,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-public final class FitzNetHardcore extends JavaPlugin implements Listener {
+public final class FitzNetHardcore extends JavaPlugin{
 
     public final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
     private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
+    private DatabaseManager dbm;
     //private final HashMap<String,Integer> playerMap = new HashMap<>();
 
     //******************************************************************************
@@ -58,15 +55,26 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         //getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new EventManager(this),this);
         //Create and check for database
-        verifyFiles();
-        loadDatabase();
+        //verifyFiles();
+        //loadDatabase();
+
         // One Second = 20 Ticks
         // One Min = 1200 Ticks
         // Every 24 Mins (Every Minecraft Day)
         //BukkitTask mainSch = new Scheduler(this).runTaskTimer(this, 0L, 28800L);
         //Test call to speed things up Every 5 seconds
         BukkitTask mainSch = new LivesScheduler(this).runTaskTimer(this, 0L, 10L);
+
+        // Enable new database
+        createFolders();
+        dbm = new DatabaseManager(this);
         
+        
+    }
+
+    private void createFolders() {
+        File userFiles  = new File(getDataFolder(), "PlayerData");
+        userFiles.mkdirs();
     }
 
     @Override
@@ -99,24 +107,6 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * a database file is present. If not, create a blank database.
      */
     private void verifyFiles() {
-        final File livesDatabase = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
-        //Check if there is already a database. If not, create one.
-        if (!livesDatabase.exists()) {
-            Logger.logInfo("Writing blank database file \"livesDatabase.txt\".");
-            try {
-                if (livesDatabase.createNewFile()) {
-                    Logger.logInfo("livesDatabase.txt CREATED");
-                } else {
-                    Logger.logError("livesDatabase.txt NOT CREATED");
-                }
-            } catch (final IOException e) {
-                e.printStackTrace();
-                Logger.logError(e.getMessage());
-
-            }
-        } else {
-            Logger.logInfo("Database file found.");
-        }
     }
 
     @Override
@@ -280,7 +270,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @param player - This is a player
      * @return hardcorePlayer - A hardcore player object
      */
-    public HardcorePlayer getHardcorePlayer(final Player player) {
+    public HardcorePlayer getHardcorePlayer(Player player) {
         for (final HardcorePlayer hardcorePlayer : hardcorePlayerList) {
             if (player.getName().matches(hardcorePlayer.getUsername()))
                 return hardcorePlayer;

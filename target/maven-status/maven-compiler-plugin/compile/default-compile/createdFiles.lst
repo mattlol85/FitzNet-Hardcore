@@ -1,4 +1,5 @@
 org/fitznet/doomdns/util/BasicUtil.class
+org/fitznet/doomdns/fitznethardcore/DatabaseManager.class
 org/fitznet/doomdns/fitznethardcore/FitzNetHardcore.class
 org/fitznet/doomdns/fitznethardcore/HardcorePlayer.class
 org/fitznet/doomdns/fitznethardcore/LivesScoreboard.class

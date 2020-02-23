@@ -15,20 +15,6 @@ public class EventManager implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
-    /**
-     * onPlayerDeath() - Detect an instance where a player death occured.
-     *
-     * @param e - Entity that died
-     */
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        Player deadPlayer = e.getEntity().getPlayer();
-        // REMOVE LIFE FROM PLAYER
-        // DISRESPECT THE PLAYER
-        deadPlayer.getWorld().strikeLightningEffect(deadPlayer.getLocation());
-        deadPlayer.sendMessage(ChatColor.YELLOW + "Removing one life !");
-
-    }
 
     // *********Events**************************
 
@@ -46,14 +32,25 @@ public class EventManager implements Listener {
         // Get the new player Object
         Player player = p.getPlayer();
         Logger.logInfo(p.getPlayer() + " Join Event Trigger.");
-        // Check if player is in database
-        // if (exists(player)) {
-        // //Say welcome back or something, make a nice picture idk.
-        // logInfo("PLAYER EXISTS IN DATABASE");
-        // } else {
-        // logInfo("PLAYER DOESNT EXIST IN DATABASE");
-        // initWritePlayer(player);
-        // }
+        //Check if new
+        if(!DatabaseManager.exists(p.getPlayer())){
+        //Create config file for player
+        DatabaseManager.createCustomConfig(player);
+        }
+    }
+
+    @EventHandler
+    /**
+     * onPlayerDeath() - Detect an instance where a player death occured.
+     *
+     * @param e - Entity that died
+     */
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        Player deadPlayer = e.getEntity().getPlayer();
+        // REMOVE LIFE FROM PLAYER
+        // DISRESPECT THE PLAYER
+        deadPlayer.getWorld().strikeLightningEffect(deadPlayer.getLocation());
+        deadPlayer.sendMessage(ChatColor.YELLOW + "Removing one life !");
 
     }
 
