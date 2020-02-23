@@ -40,6 +40,8 @@ public class DatabaseManager {
             configFile.addDefault("Name", player.getDisplayName());
             configFile.addDefault("Lives", 1);
             configFile.addDefault("RegenTimer", "00:00");
+            configFile.addDefault("Invincible", false);
+            configFile.options().copyDefaults(true);
             configFile.save(playerFile);
         } catch (IOException e) {
             // TODO Auto-generated catch block
