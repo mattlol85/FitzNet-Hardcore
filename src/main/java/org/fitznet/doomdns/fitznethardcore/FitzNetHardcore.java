@@ -22,7 +22,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitTask;
 import org.fitznet.doomdns.util.BasicUtil;
 
 import java.io.File;
@@ -31,7 +30,7 @@ public final class FitzNetHardcore extends JavaPlugin {
 
     public final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
     //private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
-    private DatabaseManager dbm;
+    private DatabaseManager dbm = new DatabaseManager(this);
     // private final HashMap<String,Integer> playerMap = new HashMap<>();
 
     // ******************************************************************************
@@ -39,7 +38,7 @@ public final class FitzNetHardcore extends JavaPlugin {
     /**
      *
      */
-    @Override
+    @Override   
     public void onEnable() {
 
         // Plugin startup logic
@@ -50,10 +49,8 @@ public final class FitzNetHardcore extends JavaPlugin {
         saveDefaultConfig();
         // getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new EventManager(this), this);
-        // Enable new database
+        //Ensure playerData folder is created
         createFolders();
-        dbm = new DatabaseManager(this);
-
     }
 
     private void createFolders() {

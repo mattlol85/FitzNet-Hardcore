@@ -3,16 +3,13 @@ package org.fitznet.doomdns.fitznethardcore;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.json.simple.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class DatabaseManager {
-    static FitzNetHardcore plugin;
-    static final File folder = new File("plugins/Fitz-NetHardcore/PlayerData//");
-    ArrayList<JSONObject> playerJsonFiles = new ArrayList<>();
+    static private FitzNetHardcore plugin;
+    static private final File folder = new File("plugins/Fitz-NetHardcore/PlayerData//");
 
     public DatabaseManager(FitzNetHardcore plugin) {
         DatabaseManager.plugin = plugin;

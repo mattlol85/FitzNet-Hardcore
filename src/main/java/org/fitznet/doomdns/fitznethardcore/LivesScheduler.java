@@ -17,6 +17,7 @@ public class LivesScheduler extends BukkitRunnable {
 
     @Override
     public void run(){
+        Logger.logDebug("Scheduler: Adding Life for " + player.getName());
         BasicUtil.addLife(player);
     }
 }
