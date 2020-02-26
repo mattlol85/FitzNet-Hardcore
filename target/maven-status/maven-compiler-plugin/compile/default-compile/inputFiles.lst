@@ -1,5 +1,8 @@
+/home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/DatabaseManager.java
 /home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/FitzNetHardcore.java
 /home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/EventManager.java
-/home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/Logging.java
+/home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/LivesScheduler.java
 /home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/LivesScoreboard.java
+/home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/Logger.java
 /home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/HardcorePlayer.java
+/home/matt/Projects/Java/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/util/BasicUtil.java

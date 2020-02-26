@@ -7,3 +7,6 @@ MaxLives: 3
 
 # How long should it take to regenerate a life?
 LifeRegenTime: 8
+
+# How many lives should each player start with?
+StartingLives: 1

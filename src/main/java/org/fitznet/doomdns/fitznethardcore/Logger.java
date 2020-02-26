@@ -1,6 +1,6 @@
 package org.fitznet.doomdns.fitznethardcore;
 
-public class Logging {
+public class Logger {
 
     private static final String PREFIX = "Fitz-Net Hardcore";
 

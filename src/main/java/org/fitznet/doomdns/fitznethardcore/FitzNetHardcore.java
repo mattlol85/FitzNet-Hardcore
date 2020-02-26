@@ -22,23 +22,21 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-import static org.fitznet.doomdns.fitznethardcore.Logging.*;
-
-public final class FitzNetHardcore extends JavaPlugin implements Listener {
+public final class FitzNetHardcore extends JavaPlugin{
 
     public final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
     private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
+    private DatabaseManager dbm;
+    //private final HashMap<String,Integer> playerMap = new HashMap<>();
 
     //******************************************************************************
 
@@ -47,23 +45,42 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      */
     @Override
     public void onEnable() {
+
         // Plugin startup logic
-        logInfo("FitzNet starting up.");
+        Logger.logInfo("FitzNet starting up.");
         //Load file and copy on every reload
         getConfig().options().copyDefaults();
         //Saves file from above
         saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(this, this);
+        //getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new EventManager(this),this);
         //Create and check for database
-        verifyFiles();
-        loadDatabase();
+        //verifyFiles();
+        //loadDatabase();
+
+        // One Second = 20 Ticks
+        // One Min = 1200 Ticks
+        // Every 24 Mins (Every Minecraft Day)
+        //BukkitTask mainSch = new Scheduler(this).runTaskTimer(this, 0L, 28800L);
+        //Test call to speed things up Every 5 seconds
+        BukkitTask mainSch = new LivesScheduler(this).runTaskTimer(this, 0L, 10L);
+
+        // Enable new database
+        createFolders();
+        dbm = new DatabaseManager(this);
         
+        
+    }
+
+    private void createFolders() {
+        File userFiles  = new File(getDataFolder(), "PlayerData");
+        userFiles.mkdirs();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        logInfo("FitzNet Shutting down gracefully.");
+        Logger.logInfo("FitzNet Shutting down gracefully.");
         writeDatabase();
     }
 
@@ -74,12 +91,12 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         try {
             final Scanner in = new Scanner(database);
             while (in.hasNext()) {
-                hardcorePlayerList.add(new HardcorePlayer(in.next(), in.nextInt()));
+                hardcorePlayerList.add(new HardcorePlayer(in.next(),in.nextInt()));
             }
             in.close();
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
-            logError(e.getMessage());
+            Logger.logError(e.getMessage());
         }
     }
 
@@ -90,66 +107,6 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * a database file is present. If not, create a blank database.
      */
     private void verifyFiles() {
-        final File livesDatabase = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
-        //Check if there is already a database. If not, create one.
-        if (!livesDatabase.exists()) {
-            logInfo("Writing blank database file \"livesDatabase.txt\".");
-            try {
-                if (livesDatabase.createNewFile()) {
-                    logInfo("livesDatabase.txt CREATED");
-                } else {
-                    logError("livesDatabase.txt NOT CREATED");
-                }
-            } catch (final IOException e) {
-                e.printStackTrace();
-                logError(e.getMessage());
-
-            }
-        } else {
-            logInfo("Database file found.");
-        }
-    }
-
-    //*********Events**************************
-
-    /**
-     * onJoin will preform multiple functions.
-     * <p>
-     * 1 - Check if the player is already in the database. If not, add them and play into prompt.
-     * 2 - ...Uhh man i forgot where this one was going
-     *
-     * @param p - Player join event.
-     */
-    @EventHandler
-    public void onJoin(final PlayerJoinEvent p) {
-
-        //Get the new player Object
-        final Player player = p.getPlayer();
-        logInfo(p.getPlayer() + " Join Event Trigger.");
-        //Check if player is in database
-        if (exists(player)) {
-            //Say welcome back or something, make a nice picture idk.
-            logInfo("PLAYER EXISTS IN DATABASE");
-        } else {
-            logInfo("PLAYER DOESNT EXIST IN DATABASE");
-            initWritePlayer(player);
-        }
-
-    }
-
-    @EventHandler
-    /**
-     * onPlayerDeath() - Detect an instance where a player death occured.
-     *
-     * @param e - Entity that died
-     */
-    public void onPlayerDeath(final PlayerDeathEvent e) {
-        final Player deadPlayer = e.getEntity().getPlayer();
-        //REMOVE LIFE FROM PLAYER
-        removeLife(deadPlayer);
-        //DISRESPECT THE PLAYER
-        deadPlayer.getWorld().strikeLightningEffect(deadPlayer.getLocation());
-        deadPlayer.sendMessage(ChatColor.YELLOW + "Removing one life !");
     }
 
     @Override
@@ -169,7 +126,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 //   player.giveExp(10);
             } else
                 //User is on the console (ADMIN ONLY)
-                logInfo("Hello Server Master.");
+                Logger.logInfo("Hello Server Master.");
         }
 
 
@@ -181,7 +138,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
                 player.sendMessage(ChatColor.RED + player.getName() + "... you have " + getPlayerLives(player) + " lives!");
 
             } else {
-                logInfo("This command cannot be used on Console.");
+                Logger.logInfo("This command cannot be used on Console.");
             }
         }
         //Add one life to player
@@ -205,16 +162,20 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
         if (command.getName().equals("fndebug")) {
             if (sender instanceof Player) {
                 final Player player = (Player) sender;
+                
+
                 for (int i = 0; i < hardcorePlayerList.size(); i++) {
                     player.sendMessage(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
                 }
             } else {
                 for (int i = 0; i < hardcorePlayerList.size(); i++) {
-                    logInfo(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
+                    Logger.logInfo(hardcorePlayerList.get(i).getUsername() + " | " + hardcorePlayerList.get(i).getLives());
                 }
+                
             }
         }
         return false;
+        
     }
 
     /**
@@ -254,7 +215,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
             databaseIn.close();
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
-            logError(e.getMessage());
+            Logger.logError(e.getMessage());
         }
         return false;
     }
@@ -288,7 +249,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
     }
     */
     //Add one life unless at MaxLives
-    private void addLife(final Player p) {
+    private void addLife(Player p) {
         HardcorePlayer hcp = new HardcorePlayer(p.getDisplayName());
         // IF player has less than max_lives, add one
         if(getHardcorePlayer(p).getLives() < getConfig().getInt("MaxLives"))
@@ -309,7 +270,7 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
      * @param player - This is a player
      * @return hardcorePlayer - A hardcore player object
      */
-    public HardcorePlayer getHardcorePlayer(final Player player) {
+    public HardcorePlayer getHardcorePlayer(Player player) {
         for (final HardcorePlayer hardcorePlayer : hardcorePlayerList) {
             if (player.getName().matches(hardcorePlayer.getUsername()))
                 return hardcorePlayer;
@@ -330,8 +291,8 @@ public final class FitzNetHardcore extends JavaPlugin implements Listener {
 
             for (final HardcorePlayer hardcorePlayer : hardcorePlayerList) {
                 //Write value to txt file
-                logInfo("Logging player.");
-                logInfo(hardcorePlayer.getUsername() + "\t" + hardcorePlayer.getLives());
+                Logger.logInfo("Logging player.");
+                Logger.logInfo(hardcorePlayer.getUsername() + "\t" + hardcorePlayer.getLives());
                 pw.println(hardcorePlayer.getUsername() + "\t" + hardcorePlayer.getLives());
                 pw.flush();
             }
