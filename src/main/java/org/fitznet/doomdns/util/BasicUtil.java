@@ -64,7 +64,4 @@ public class BasicUtil {
         return DatabaseManager.getInt(p, "Lives");
     }
 
-    // public static String getIngameTime(FitzNetHardcore plugin){
-        
-    // }
 }

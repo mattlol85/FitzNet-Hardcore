@@ -28,10 +28,7 @@ import java.io.File;
 
 public final class FitzNetHardcore extends JavaPlugin {
 
-    public final File database = new File(getDataFolder().getAbsolutePath() + "\\livesDatabase.txt");
-    //private final ArrayList<HardcorePlayer> hardcorePlayerList = new ArrayList<>();
     private DatabaseManager dbm = new DatabaseManager(this);
-    // private final HashMap<String,Integer> playerMap = new HashMap<>();
 
     // ******************************************************************************
 
@@ -62,8 +59,7 @@ public final class FitzNetHardcore extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        EventManager.stopTimers();
-        Logger.logInfo("FitzNet Shutting down gracefully.");
+        Logger.logInfo("Fitz-Net Shutting down gracefully.");
     }
 
     // **********************METHODS*************************************************
@@ -117,7 +113,13 @@ public final class FitzNetHardcore extends JavaPlugin {
                 BasicUtil.removeLife(player);
             }
         }
-
+        if (command.getName().equals("setlife")){
+            //If there is no player specificed, return
+            if(args[0].equals("") || args[1].equals("")){
+                sender.sendMessage("Please enter a valid user and lives amount.");
+            }
+            
+        }
         // Print out list of players and
         if (command.getName().equals("fndebug")) {
             if (sender instanceof Player) {
