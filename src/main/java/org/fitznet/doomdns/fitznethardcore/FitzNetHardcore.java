@@ -50,17 +50,6 @@ public final class FitzNetHardcore extends JavaPlugin {
         saveDefaultConfig();
         // getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new EventManager(this), this);
-        // Create and check for database
-        // verifyFiles();
-        // loadDatabase();
-
-        // One Second = 20 Ticks
-        // One Min = 1200 Ticks
-        // Every 24 Mins (Every Minecraft Day)
-        // BukkitTask mainSch = new Scheduler(this).runTaskTimer(this, 0L, 28800L);
-        // Test call to speed things up Every 5 seconds
-        BukkitTask mainSch = new LivesScheduler(this).runTaskTimer(this, 0L, 10L);
-
         // Enable new database
         createFolders();
         dbm = new DatabaseManager(this);
@@ -76,6 +65,7 @@ public final class FitzNetHardcore extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        EventManager.stopTimers();
         Logger.logInfo("FitzNet Shutting down gracefully.");
     }
 
