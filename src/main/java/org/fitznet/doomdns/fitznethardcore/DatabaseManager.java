@@ -18,15 +18,7 @@ public class DatabaseManager {
         DatabaseManager.plugin = plugin;
     }
 
-    public static String getString(Player p, String query){
-        FileConfiguration config = getPlayerFile(p);
-        return config.getString(query);
 
-    }
-    public static int getInt(Player p, String query){
-        FileConfiguration config = getPlayerFile(p);
-        return config.getInt(query);
-    }
     /**
      * Create a new playerdata.yml file that will store
      * information about the player to the plugin and
@@ -53,7 +45,9 @@ public class DatabaseManager {
             Logger.logError("Error opening/writing player config!");
         }
     }
-
+    /**
+     * Check if a playerfile was already created
+     */
     public static boolean exists(Player player) {
         File playerFile = new File(folder, player.getUniqueId().toString());
         if (playerFile.exists())
@@ -62,14 +56,31 @@ public class DatabaseManager {
             return false;
     }
 
+    //          Getters & Setters
+    public static String getString(Player p, String query){
+        FileConfiguration config = getPlayerFileConfiguration(p);
+        return config.getString(query);
+
+    }
+    public static int getInt(Player p, String query){
+        FileConfiguration config = getPlayerFileConfiguration(p);
+        return config.getInt(query);
+    }
+
     /**
      * returns the player config file
      * @param p Player to get config file from
      * @return requested player configuration file
      */
-    public static FileConfiguration getPlayerFile(Player p) {
-        File playerFile = new File(folder , p.getUniqueId().toString()+ ".yml");
+    public static FileConfiguration getPlayerFileConfiguration(Player p) {
+        File playerFile = getPlayerFile(p);
         FileConfiguration config = YamlConfiguration.loadConfiguration(playerFile);
         return config;
+    }
+    /**
+     * 
+     */
+    public static File getPlayerFile(Player p){
+        return new File(folder, p.getUniqueId().toString() + ".yml");
     }
 }
