@@ -1,4 +1,4 @@
-package org.fitznet.doomdns.fitznethardcore;
+package org.fitznet.doomdns.fitznethardcore.listeners;
 
 import java.util.HashMap;
 
@@ -8,20 +8,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
+import org.fitznet.doomdns.fitznethardcore.DatabaseManager;
+import org.fitznet.doomdns.fitznethardcore.FitzNetHardcore;
+import org.fitznet.doomdns.fitznethardcore.LivesScheduler;
+import org.fitznet.doomdns.fitznethardcore.Logger;
 
-public class EventManager implements Listener {
+public class FNLoginListener implements Listener {
     private FitzNetHardcore plugin;
     private static HashMap<Player, BukkitTask> timerMap = new HashMap<>();
 
-    public EventManager(FitzNetHardcore plugin) {
 
+    public FNLoginListener(FitzNetHardcore plugin){
         this.plugin = plugin;
     }
 
-
-    // *********Events**************************
-
-    /**
+        /**
      * onJoin will preform multiple functions.
      * <p>
      * 1 - Check if the player is already in the database. If not, add them and play
