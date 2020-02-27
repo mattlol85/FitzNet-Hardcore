@@ -1,0 +1,12 @@
+# Compiled Source #
+###################
+*.com
+*.class
+
+# Packages #
+############
+*.jar
+
+# OS GENERATED #
+.idea
+.vscode

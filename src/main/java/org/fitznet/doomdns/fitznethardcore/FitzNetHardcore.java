@@ -29,7 +29,7 @@ import java.io.File;
 public final class FitzNetHardcore extends JavaPlugin {
 
     private final DatabaseManager dbm = new DatabaseManager(this);
-    // Declare all event listeners
+    // Declare all listeners
     private final FNPlayerDeathListener  deathListener = new FNPlayerDeathListener(this);
     private final FNLoginListener loginLogoutListener = new FNLoginListener(this);
 
