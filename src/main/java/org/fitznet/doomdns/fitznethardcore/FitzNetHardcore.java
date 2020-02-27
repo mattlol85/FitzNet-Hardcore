@@ -16,19 +16,21 @@
 //Matthew Fitzgerald Jan 19 2020
 package org.fitznet.doomdns.fitznethardcore;
 
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.fitznet.doomdns.fitznethardcore.command.LivesCommand;
 import org.fitznet.doomdns.util.BasicUtil;
 
 import java.io.File;
 
 public final class FitzNetHardcore extends JavaPlugin {
 
-    private DatabaseManager dbm = new DatabaseManager(this);
+    private final DatabaseManager dbm = new DatabaseManager(this);
+    // Declare all event listeners
+
 
     // ******************************************************************************
 
@@ -48,6 +50,7 @@ public final class FitzNetHardcore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new EventManager(this), this);
         //Ensure playerData folder is created
         createFolders();
+        registerCommands();
     }
 
     private void createFolders() {
@@ -63,7 +66,9 @@ public final class FitzNetHardcore extends JavaPlugin {
     }
 
     // **********************METHODS*************************************************
-
+    public void registerCommands(){
+        getCommand("lives").setExecutor(new LivesCommand(this));
+    }
     @Override
     /**
      * onCommand - Sets commands for the server
@@ -73,62 +78,35 @@ public final class FitzNetHardcore extends JavaPlugin {
             final String[] args) {
         // COMMANDS
         // ***************************
-        // Fitznet Testing method only.
-        if (command.getName().equals("fitznet")) {
-            // Must be a player only
-            if (sender instanceof Player) {
-                final Player player = (Player) sender;
-                player.sendMessage("FitzNet Commands");
-                // player.giveExp(10);
-            } else
-                // User is on the console (ADMIN ONLY)
-                Logger.logInfo("Hello Server Master.");
-        }
-
         // Returns the number of lives the player has
-
-        if (command.getName().equals("lives")) {
-            if (sender instanceof Player) {
-                final Player player = (Player) sender;
-                player.sendMessage(
-                        ChatColor.RED + player.getName() + "... you have " + DatabaseManager.getInt(player, "Lives") + " lives!");
-
-            } else {
-                Logger.logInfo("This command cannot be used on Console.");
-            }
-        }
         // Add one life to player
         if (command.getName().equals("addlife")) {
             if (sender instanceof Player) {
                 final Player player = (Player) sender;
                 // Add one life
                 BasicUtil.addLife(player);
+                return true;
             }
         }
+        
         // Remove one life from player
         if (command.getName().equals("sublife")) {
             if (sender instanceof Player) {
                 final Player player = (Player) sender;
                 // Subtract one life
                 BasicUtil.removeLife(player);
+                return true;
             }
         }
         if (command.getName().equals("setlife")){
             //If there is no player specificed, return
             if(args[0].equals("") || args[1].equals("")){
                 sender.sendMessage("Please enter a valid user and lives amount.");
+                return true;
             }
             
         }
-        // Print out list of players and
-        if (command.getName().equals("fndebug")) {
-            if (sender instanceof Player) {
-                final Player player = (Player) sender;
-                //TODO Debug command
-            }
-        }
         return false;
-
     }
 
     // Ban from server. Blow them up, do something.

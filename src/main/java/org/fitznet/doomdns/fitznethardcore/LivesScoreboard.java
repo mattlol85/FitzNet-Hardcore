@@ -5,6 +5,5 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class LivesScoreboard {
     JavaPlugin fnhc;
 
-    void testMethod(){
-    }
+
 }

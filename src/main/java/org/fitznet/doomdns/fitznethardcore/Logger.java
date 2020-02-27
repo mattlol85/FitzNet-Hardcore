@@ -20,7 +20,7 @@ public final class Logger {
         logWithExtra("Warning", message);
     }
 
-    static void logInfo(String message) {
+    public static void logInfo(String message) {
         logWithExtra("Info", message);
     }
 

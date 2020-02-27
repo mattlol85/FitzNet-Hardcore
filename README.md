@@ -9,9 +9,11 @@ Fitz-Net Hardcore is a plugin that is designed for low to medium population serv
     - After *LifeRegenTime* minuites, the player will have a new life.
         - May implement further ways to deal with lives
             - (Ex. Killing player steals life, granting a friend a life but costing 2 for them.)
-2. Scoreboard to track other players lives, and your own lives
+2. Scoreboard
+    - Tracks Your lives.
+    - Shows lives under username visible to other players.
 3. Server Permissions
-
+    - Soon to come
 ## Using config.yml
     The config.yml file is relatively straightforward. There are a few variables there but all of them are extremely important.
 
