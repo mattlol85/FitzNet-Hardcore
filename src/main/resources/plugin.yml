@@ -6,18 +6,12 @@ authors: [MatthewFitzgerald]
 description: Hardcore mod. Gives lives and regen.
 website: fitznet.doomdns.org
 commands:
-  fitznet:
-    description: Testing method.
-    usage: /<command>
   lives:
     description: Display how many lives you have left.
     usage: /<command>
   addlife:
     description: Add one life.
     usage: /addlife
-  sublife:
+  removelife:
     description: Remove one life.
-    usage: /<command>
-  fndebug:
-    description: Show ALL players lives in the database.
     usage: /<command>

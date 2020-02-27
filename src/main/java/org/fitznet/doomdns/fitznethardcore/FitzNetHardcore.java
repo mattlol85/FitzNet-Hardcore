@@ -21,7 +21,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.fitznet.doomdns.fitznethardcore.command.AddLifeCommand;
 import org.fitznet.doomdns.fitznethardcore.command.LivesCommand;
+import org.fitznet.doomdns.fitznethardcore.command.RemoveLifeCommand;
+import org.fitznet.doomdns.fitznethardcore.command.SetLifeCommand;
 import org.fitznet.doomdns.util.BasicUtil;
 
 import java.io.File;
@@ -68,52 +71,8 @@ public final class FitzNetHardcore extends JavaPlugin {
     // **********************METHODS*************************************************
     public void registerCommands(){
         getCommand("lives").setExecutor(new LivesCommand(this));
+        getCommand("setlife").setExecutor(new SetLifeCommand(this));
+        getCommand("removelife").setExecutor(new RemoveLifeCommand(this));
+        getCommand("addlife").setExecutor(new AddLifeCommand(this));
     }
-    @Override
-    /**
-     * onCommand - Sets commands for the server
-     *
-     */
-    public boolean onCommand(final CommandSender sender, final Command command, final String label,
-            final String[] args) {
-        // COMMANDS
-        // ***************************
-        // Returns the number of lives the player has
-        // Add one life to player
-        if (command.getName().equals("addlife")) {
-            if (sender instanceof Player) {
-                final Player player = (Player) sender;
-                // Add one life
-                BasicUtil.addLife(player);
-                return true;
-            }
-        }
-        
-        // Remove one life from player
-        if (command.getName().equals("sublife")) {
-            if (sender instanceof Player) {
-                final Player player = (Player) sender;
-                // Subtract one life
-                BasicUtil.removeLife(player);
-                return true;
-            }
-        }
-        if (command.getName().equals("setlife")){
-            //If there is no player specificed, return
-            if(args[0].equals("") || args[1].equals("")){
-                sender.sendMessage("Please enter a valid user and lives amount.");
-                return true;
-            }
-            
-        }
-        return false;
-    }
-
-    // Ban from server. Blow them up, do something.
-    // private void fitzNetSmiteThisFoolForDying(final Player player) {
-    // Do something grate mate :)
-
-    // }
-
-
 }

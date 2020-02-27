@@ -3,7 +3,6 @@ package org.fitznet.doomdns.fitznethardcore.command;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.fitznet.doomdns.fitznethardcore.FitzNetHardcore;
 
 public class SetLifeCommand implements CommandExecutor{
