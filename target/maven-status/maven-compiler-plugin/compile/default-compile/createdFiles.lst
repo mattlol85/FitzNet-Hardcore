@@ -6,8 +6,8 @@ org/fitznet/doomdns/fitznethardcore/FitzNetHardcore.class
 org/fitznet/doomdns/fitznethardcore/command/LivesCommand.class
 org/fitznet/doomdns/fitznethardcore/LivesScoreboard.class
 org/fitznet/doomdns/fitznethardcore/command/SetLifeCommand.class
-org/fitznet/doomdns/fitznethardcore/LivesScheduler.class
 org/fitznet/doomdns/fitznethardcore/EventManager.class
+org/fitznet/doomdns/fitznethardcore/LivesScheduler.class
 org/fitznet/doomdns/fitznethardcore/listeners/FNPlayerDeathListener.class
-org/fitznet/doomdns/fitznethardcore/Logger.class
 org/fitznet/doomdns/fitznethardcore/listeners/FNLoginListener.class
+org/fitznet/doomdns/fitznethardcore/Logger.class
