@@ -4,8 +4,8 @@ Fitz-Net Hardcore is a plugin that is designed for low to medium population serv
 
 ## Features
 1. Life Regeneration.
-    - Each player starts with one life
-        - This value is *MaxLives* in the config.yml
+    - Each player starts with StartingLives
+        - This value is *StartingLives* in the config.yml
     - After *LifeRegenTime* minuites, the player will have a new life.
         - May implement further ways to deal with lives
             - (Ex. Killing player steals life, granting a friend a life but costing 2 for them.)
@@ -13,7 +13,7 @@ Fitz-Net Hardcore is a plugin that is designed for low to medium population serv
     - Tracks Your lives.
     - Shows lives under username visible to other players.
 3. Server Permissions
-    - Soon to come
+    - WIP
 ## Using config.yml
 The config.yml file is relatively straightforward. There are a few variables there but all of them are extremely important.
 
