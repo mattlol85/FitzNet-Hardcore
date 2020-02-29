@@ -25,8 +25,8 @@ The config.yml file is relatively straightforward. There are a few variables the
 
 
 ### Contributors
-- @mattlol85
-- @kenny-designs
+- [@mattlol85](https://github.com/mattlol85)
+- [@kenny-designs](https://github.com/kenny-designs)
 
 #### In Progress
 [Github Issues Page](https://github.com/mattlol85/FitzNet-Hardcore/issues)
