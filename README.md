@@ -25,8 +25,37 @@ The config.yml file is relatively straightforward. There are a few variables the
 
 
 ### Contributors
-- @mattlol85
-- @kenny-designs
+- [@mattlol85](https://github.com/mattlol85)
+- [@kenny-designs](https://github.com/kenny-designs)
 
 #### In Progress
 [Github Issues Page](https://github.com/mattlol85/FitzNet-Hardcore/issues)
+
+## Setting Up a Development Environment
+
+### Want to contribute? We'd love to have you! Here's how to start:
+
+1) You'll need a place to program in. We recommend the text editor [Visual Studio Code](https://code.visualstudio.com/).
+    1) To make the process even simpler, you can also install [IntelliJ](https://www.jetbrains.com/idea/) along with the [Minecraft Development Plugin](https://plugins.jetbrains.com/plugin/8327-minecraft-development).
+2) Clone this repo with git using this URL: https://github.com/mattlol85/FitzNet-Hardcore.git.
+3) Make a directory next to **but NOT in** the FitzNet-Hardcore repo you just cloned.
+    1) Name this new directory something like *Fitznet-DevServer*. This is where your local server is going to end up.
+4) You'll also need Spigot to get your local server going. To do this, download the BuildTools.jar from [here](https://www.spigotmc.org/wiki/buildtools/) and place it in your Fitznet-DevServer directory you just created.
+    1) **Only** download the BuildTools.jar! Do not run it yet.
+5) Go inside the FitzNet-Hardcore repo you cloned and run the command `mvn`.
+    1) If `mvn` doesn't work, make sure you have [Maven](https://maven.apache.org/) installed.
+    2) This will create a Fitz-NetHardcore-&ast;-SNAPSHOT.jar in the target directory.
+    3) Copy the Fitz-NetHardcore-&ast;-SNAPSHOT.jar from the FitzNet-Hardcore/target directory and place it inside your Fitznet-DevServer/plugins directory. *If the plugins folder doesn't exist, create it!*
+6) Inside of Fitznet-DevServer, run the following command: `java -jar BuildTools.jar`
+7) Once BuildTools.jar finishes, there will be a new jar labeled spigot-&ast;.jar.
+    1) To start your server, run the following: `java -jar spigot-&ast;.jar nogui`
+8) Once the world is finished building, we can finally connect!
+    1) Launch Minecraft Java Edition and go to multiplayer
+    2) Add a server called something like *Fitznet-Dev* and make its address *localhost*.
+9) And that's it! :sunglasses: Connect to your server and enjoy messing around with the plugin!
+    1) Trying typing /lives. If you get a response then the plugin is working!
+10) When you're done playing around, enter 'stop' into the console that you started the server from to shut it down.
+
+### Making Changes
+
+Everytime you want to see a change you made in action, generate a new Fitz-NetHardcore-&ast;-SNAPSHOT.jar as we did above and then place it in your servers plugins directory. Then just restart your server and check out what you did!
