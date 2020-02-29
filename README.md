@@ -33,7 +33,7 @@ The config.yml file is relatively straightforward. There are a few variables the
 
 ## Setting Up a Development Environment
 
-#### Want to contribute? We'd love to have you! Here are some instructions on how to get started!
+### Want to contribute? We'd love to have you! Here's how to start:
 
 1) You'll need a place to program in. We recommend the text editor [Visual Studio Code](https://code.visualstudio.com/).
     1) To make the process even simpler, you can also install [IntelliJ](https://www.jetbrains.com/idea/) along with the [Minecraft Development Plugin](https://plugins.jetbrains.com/plugin/8327-minecraft-development).
@@ -55,5 +55,7 @@ The config.yml file is relatively straightforward. There are a few variables the
 9) And that's it! :sunglasses: Connect to your server and enjoy messing around with the plugin!
     1) Trying typing /lives. If you get a response then the plugin is working!
 10) When you're done playing around, enter 'stop' into the console that you started the server from to shut it down.
+
+### Making Changes
 
 Everytime you want to see a change you made in action, generate a new Fitz-NetHardcore-&ast;-SNAPSHOT.jar as we did above and then place it in your servers plugins directory. Then just restart your server and check out what you did!
