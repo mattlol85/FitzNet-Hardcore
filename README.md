@@ -30,3 +30,5 @@ The config.yml file is relatively straightforward. There are a few variables the
 
 #### In Progress
 [Github Issues Page](https://github.com/mattlol85/FitzNet-Hardcore/issues)
+
+## Setting Up a Development Environment
