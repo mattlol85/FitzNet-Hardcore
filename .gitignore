@@ -2,6 +2,7 @@
 ###################
 *.com
 *.class
+target
 
 # Packages #
 ############
@@ -10,3 +11,4 @@
 # OS GENERATED #
 .idea
 .vscode
+.settings
