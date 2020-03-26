@@ -22,8 +22,9 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.fitznet.doomdns.fitznethardcore.DatabaseManager;
 import org.fitznet.doomdns.fitznethardcore.FitzNetHardcore;
-import org.fitznet.doomdns.fitznethardcore.LivesScheduler;
 import org.fitznet.doomdns.fitznethardcore.Logger;
+import org.fitznet.doomdns.fitznethardcore.Scheduler;
+import org.fitznet.doomdns.util.BasicUtil;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -61,7 +62,7 @@ public class FNLoginListener implements Listener {
         System.out.println(Bukkit.getServer().getWorld("world").getTime());
         createScoreboard(player);
         updateScoreboard();
-        timerMap.put(p.getPlayer(), new LivesScheduler(plugin,player).runTaskTimerAsynchronously(plugin, (plugin.getConfig().getInt("LifeRegenTime") * 1200L), (plugin.getConfig().getInt("LifeRegenTime") * 1200L)));
+        timerMap.put(p.getPlayer(), new Scheduler(plugin,player).runTaskTimerAsynchronously(plugin, 0L, 100L));
         //timerMap.put(p.getPlayer(), new LivesScheduler(plugin,player).runTaskTimerAsynchronously(plugin, 2L, 99999999999999L));
 
     }
@@ -75,15 +76,14 @@ public class FNLoginListener implements Listener {
         objective.setDisplayName(ChatColor.RED + "FITZNET HARDCORE");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         Score score = objective.getScore("Players:");
+        Score score2 = objective.getScore("Lives:");
         score.setScore(Bukkit.getOnlinePlayers().size());
+        score2.setScore(BasicUtil.getPlayerLives(p));
         p.setScoreboard(board);
 
     }
     public void updateScoreboard(){
-        for (Player online : Bukkit.getOnlinePlayers()){
-            Score score = online.getScoreboard().getObjective(DisplaySlot.SIDEBAR).getScore("Players:");
-            score.setScore(Bukkit.getOnlinePlayers().size());
-        }
+
     }
 
 
