@@ -39,4 +39,5 @@ cp $PLUGIN_PATH/target/Fitz-NetHardcore-*-SNAPSHOT.jar $SERVER_PATH/plugins/
 
 # Run Server
 cd $SERVER_PATH
-java -jar spigot*.jar nogui
+#java -jar spigot*.jar nogui
+java -jar paper*.jar nogui
