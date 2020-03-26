@@ -63,7 +63,10 @@ public class DatabaseManager {
         FileConfiguration config = getPlayerFileConfiguration(p);
         return config.getInt(query);
     }
-
+    public static boolean getBoolean(Player p, String query){
+        FileConfiguration config = getPlayerFileConfiguration(p);
+        return config.getBoolean(query);
+    }
     /**
      * returns the player config file
      * @param p Player to get config file from

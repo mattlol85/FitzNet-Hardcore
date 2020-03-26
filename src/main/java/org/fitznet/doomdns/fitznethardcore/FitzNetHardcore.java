@@ -22,6 +22,7 @@ import org.fitznet.doomdns.fitznethardcore.command.AddLifeCommand;
 import org.fitznet.doomdns.fitznethardcore.command.LivesCommand;
 import org.fitznet.doomdns.fitznethardcore.command.RemoveLifeCommand;
 import org.fitznet.doomdns.fitznethardcore.command.SetLifeCommand;
+import org.fitznet.doomdns.fitznethardcore.command.ToggleInvincibilityCommand;
 import org.fitznet.doomdns.fitznethardcore.listeners.FNLoginListener;
 import org.fitznet.doomdns.fitznethardcore.listeners.FNPlayerDeathListener;
 
@@ -48,6 +49,7 @@ public final class FitzNetHardcore extends JavaPlugin {
         createFolders();
         registerCommands();
         registerEvents();
+        getCommand("lives");
     }
     @Override
     public void onDisable() {
@@ -65,6 +67,8 @@ public final class FitzNetHardcore extends JavaPlugin {
         getCommand("setlife").setExecutor(new SetLifeCommand(this));
         getCommand("removelife").setExecutor(new RemoveLifeCommand(this));
         getCommand("addlife").setExecutor(new AddLifeCommand(this));
+        getCommand("fngod").setExecutor(new ToggleInvincibilityCommand(this));
+
     }
     
     public void registerEvents(){
@@ -77,7 +81,7 @@ public final class FitzNetHardcore extends JavaPlugin {
      * Create playerData folder if it does not exist
      */
     private void createFolders() {
-        File userFiles = new File(getDataFolder(), "PlayerData");
+        final File userFiles = new File(getDataFolder(), "PlayerData");
         if (!userFiles.exists())
             userFiles.mkdirs();
     }

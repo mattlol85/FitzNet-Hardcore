@@ -25,6 +25,10 @@ public class FNPlayerDeathListener implements Listener {
     public void onPlayerDeath(PlayerDeathEvent e) {
         Player deadPlayer = e.getEntity().getPlayer();
         // REMOVE LIFE FROM PLAYER
+        if(deadPlayer.hasPermission("FitzNetHardcore.Invincible")){
+            deadPlayer.sendMessage("You are god !!!!!!!!!!");
+            return;
+        }
         BasicUtil.removeLife(deadPlayer);
         // DISRESPECT THE PLAYER
         deadPlayer.getWorld().strikeLightningEffect(deadPlayer.getLocation());

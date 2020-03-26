@@ -11,3 +11,9 @@ LifeRegenTime: 2
 
 # How many lives should each player start with?
 StartingLives: 1
+
+# Default action on last life
+# 1 - Kick & Ban from server
+# 2 - Spectate world on Death
+
+LastLifeMode: 1

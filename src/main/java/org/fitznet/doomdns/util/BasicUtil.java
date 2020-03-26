@@ -63,5 +63,27 @@ public class BasicUtil {
     public static int getPlayerLives(Player p){
         return DatabaseManager.getInt(p, "Lives");
     }
+    public static boolean getPlayerGodStatus(Player p){
+        return DatabaseManager.getBoolean(p, "Invincible");
+    }
 
+        /**
+     * Sets a player to invincible
+     * 
+     * @param p Player to remove one life from
+     */
+    public static void setInvincible(Player p){
+        FileConfiguration config = DatabaseManager.getPlayerFileConfiguration(p);
+        config.set("Invincible",!config.getBoolean("Invincible"));
+
+        try {
+            config.save(DatabaseManager.getPlayerFile(p));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Logger.logError(e.getMessage());
+            Logger.logError("Issue setting player to God.");
+        }  
+    }
+
+    //Invincible
 }

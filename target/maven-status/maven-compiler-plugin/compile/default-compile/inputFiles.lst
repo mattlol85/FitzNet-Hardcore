@@ -1,12 +1,13 @@
+/mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/FitzNetHardcore.java
+/mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/command/ToggleInvincibilityCommand.java
+/mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/command/AddLifeCommand.java
+/mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/listeners/FNLoginListener.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/util/BasicUtil.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/command/SetLifeCommand.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/LivesScoreboard.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/Logger.java
-/mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/FitzNetHardcore.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/LivesScheduler.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/DatabaseManager.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/command/RemoveLifeCommand.java
-/mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/command/AddLifeCommand.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/listeners/FNPlayerDeathListener.java
 /mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/command/LivesCommand.java
-/mnt/c/Users/Matt/Documents/GitRepos/FitzNet-Hardcore/src/main/java/org/fitznet/doomdns/fitznethardcore/listeners/FNLoginListener.java
