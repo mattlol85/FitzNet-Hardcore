@@ -2,16 +2,30 @@ package org.fitznet.doomdns.fitznethardcore.listeners;
 
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
+/**
+ *      // One Second = 20 Ticks
+        // One Min = 1200 Ticks
+        // Every 24 Mins (Every Minecraft Day)
+        // Amount of Mins Until New life  * One Min in ticks
+ */
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import org.fitznet.doomdns.fitznethardcore.DatabaseManager;
 import org.fitznet.doomdns.fitznethardcore.FitzNetHardcore;
 import org.fitznet.doomdns.fitznethardcore.LivesScheduler;
 import org.fitznet.doomdns.fitznethardcore.Logger;
+
+import net.md_5.bungee.api.ChatColor;
 
 public class FNLoginListener implements Listener {
     private FitzNetHardcore plugin;
@@ -35,7 +49,7 @@ public class FNLoginListener implements Listener {
         }
     }
         /**
-     * onJoin will preform multiple functions.
+     * onJoin preforms multiple functions.
      * <p>
      *  - Checks if a player is the the database, if not create them
      *  - Adds a timer for each player into a map that triggers to add a life
@@ -44,17 +58,39 @@ public class FNLoginListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent p) {
         Player player = p.getPlayer();
-        
-        // One Second = 20 Ticks
-        // One Min = 1200 Ticks
-        // Every 24 Mins (Every Minecraft Day)
-        // Amount of Mins Until New life  * One Min in ticks
+        System.out.println(Bukkit.getServer().getWorld("world").getTime());
+        createScoreboard(player);
+        updateScoreboard();
         timerMap.put(p.getPlayer(), new LivesScheduler(plugin,player).runTaskTimerAsynchronously(plugin, (plugin.getConfig().getInt("LifeRegenTime") * 1200L), (plugin.getConfig().getInt("LifeRegenTime") * 1200L)));
         //timerMap.put(p.getPlayer(), new LivesScheduler(plugin,player).runTaskTimerAsynchronously(plugin, 2L, 99999999999999L));
+
     }
+    /**
+     * Creates new scoreboard on playerJoin
+     */
+    public void createScoreboard(Player p){
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard board = manager.getNewScoreboard();
+        Objective objective = board.registerNewObjective("Stats", "Dummy");
+        objective.setDisplayName(ChatColor.RED + "FITZNET HARDCORE");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        Score score = objective.getScore("Players:");
+        score.setScore(Bukkit.getOnlinePlayers().size());
+        p.setScoreboard(board);
+
+    }
+    public void updateScoreboard(){
+        for (Player online : Bukkit.getOnlinePlayers()){
+            Score score = online.getScoreboard().getObjective(DisplaySlot.SIDEBAR).getScore("Players:");
+            score.setScore(Bukkit.getOnlinePlayers().size());
+        }
+    }
+
+
     @EventHandler
     //Stop the timer on disconnect
     public void onPlayerLeave(PlayerQuitEvent p){
         timerMap.get(p.getPlayer()).cancel();
+        updateScoreboard();
     }
 }
