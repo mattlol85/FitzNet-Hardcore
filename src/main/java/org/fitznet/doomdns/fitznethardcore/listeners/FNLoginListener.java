@@ -45,7 +45,8 @@ public class FNLoginListener implements Listener {
         //BukkitTask mainSch = new LivesScheduler(plugin,p.getPlayer()).runTaskTimerAsynchronously(plugin, 0L, 10L);
 
         // Amount of Mins Until New life  * One Min in ticks
-        timerMap.put(p.getPlayer(), new LivesScheduler(plugin,player).runTaskTimerAsynchronously(plugin, plugin.getConfig().getInt("LifeRegenTime") * 1200L, plugin.getConfig().getInt("LifeRegenTime") * 1200L));
+        //timerMap.put(p.getPlayer(), new LivesScheduler(plugin,player).runTaskTimerAsynchronously(plugin, (plugin.getConfig().getInt("LifeRegenTime") * 1200L), (plugin.getConfig().getInt("LifeRegenTime") * 1200L)));
+        timerMap.put(p.getPlayer(), new LivesScheduler(plugin,player).runTaskTimerAsynchronously(plugin, 999999999L, 99999999999999L));
     }
 
     //Stop the timer on disconnect

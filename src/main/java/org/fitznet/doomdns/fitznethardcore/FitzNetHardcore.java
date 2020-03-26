@@ -16,6 +16,7 @@
 //Matthew Fitzgerald Jan 19 2020
 package org.fitznet.doomdns.fitznethardcore;
 
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.fitznet.doomdns.fitznethardcore.command.AddLifeCommand;
 import org.fitznet.doomdns.fitznethardcore.command.LivesCommand;
@@ -43,10 +44,10 @@ public final class FitzNetHardcore extends JavaPlugin {
         // Saves file from above
         saveDefaultConfig();
         // getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new EventManager(this), this);
         //Ensure playerData folder is created
         createFolders();
         registerCommands();
+        registerEvents();
     }
     @Override
     public void onDisable() {
@@ -65,7 +66,13 @@ public final class FitzNetHardcore extends JavaPlugin {
         getCommand("removelife").setExecutor(new RemoveLifeCommand(this));
         getCommand("addlife").setExecutor(new AddLifeCommand(this));
     }
-      
+    
+    public void registerEvents(){
+        final PluginManager pluginManager = getServer().getPluginManager();
+
+        pluginManager.registerEvents(deathListener,this);
+        pluginManager.registerEvents(loginLogoutListener,this);
+    }
     /**
      * Create playerData folder if it does not exist
      */
