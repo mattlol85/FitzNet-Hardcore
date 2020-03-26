@@ -22,7 +22,6 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.fitznet.doomdns.fitznethardcore.DatabaseManager;
 import org.fitznet.doomdns.fitznethardcore.FitzNetHardcore;
-import org.fitznet.doomdns.fitznethardcore.Logger;
 import org.fitznet.doomdns.fitznethardcore.Scheduler;
 import org.fitznet.doomdns.util.BasicUtil;
 
@@ -73,6 +72,8 @@ public class FNLoginListener implements Listener {
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard board = manager.getNewScoreboard();
         Objective objective = board.registerNewObjective("Stats", "Dummy");
+        Objective playerLives = board.registerNewObjective("PlayerLives", "A Number?");
+
         objective.setDisplayName(ChatColor.RED + "FITZNET HARDCORE");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         Score score = objective.getScore("Players:");

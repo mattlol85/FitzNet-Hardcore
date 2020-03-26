@@ -32,7 +32,7 @@ public class DatabaseManager {
             configFile = YamlConfiguration.loadConfiguration(playerFile);
             configFile.addDefault("Name", player.getDisplayName());
             configFile.addDefault("Lives", plugin.getConfig().get("StartingLives"));
-            configFile.addDefault("RegenTimer", "00:00");
+            configFile.addDefault("RegenTimer", "0");
             configFile.addDefault("Invincible", false);
             configFile.options().copyDefaults(true);
             configFile.save(playerFile);

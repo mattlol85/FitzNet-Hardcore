@@ -22,23 +22,27 @@ public class Scheduler extends BukkitRunnable {
 
     @Override
     public void run() {
+        //RegenTimer
+        //Prevent player from getting life if they reach maximum
+
         if(BasicUtil.getPlayerLives(player) < plugin.getConfig().getInt("MaxLives")){
             Logger.logDebug("Scheduler: Adding Life for " + player.getName());
             BasicUtil.addLife(player);
         }
-        updateScoreboard();
+        updateInformation();
     }
 
-    public void updateScoreboard(){
+    public void updateInformation(){
        // Score score = player.getScoreboard().getObjective(DisplaySlot.SIDEBAR).getScore("Lives:");
         //score.setScore(BasicUtil.getPlayerLives(player));
+        //Update Scoreboards and increment timers for each player
         for (Player online : Bukkit.getOnlinePlayers()){
+            BasicUtil.setRegenTimer(online, BasicUtil.getRegenTimer(online)+100);
             Score score = online.getScoreboard().getObjective(DisplaySlot.SIDEBAR).getScore("Players:");
             Score score2 = online.getScoreboard().getObjective(DisplaySlot.SIDEBAR).getScore("Lives:");
             score.setScore(Bukkit.getOnlinePlayers().size());
             score2.setScore(BasicUtil.getPlayerLives(online));
-            player.sendMessage("UPDATING SCOREBOARD Scheduler");
-
+            player.sendMessage("Time til life: " + BasicUtil.getRegenTimer(player));
         }
     }
 }

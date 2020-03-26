@@ -84,6 +84,21 @@ public class BasicUtil {
             Logger.logError("Issue setting player to God.");
         }  
     }
-
-    //Invincible
+    //Set Regen timer
+    public static void setRegenTimer(Player p, int timeInTicks){
+        FileConfiguration config = DatabaseManager.getPlayerFileConfiguration(p);
+        config.set("RegenTimer", timeInTicks);
+        try {
+            config.save(DatabaseManager.getPlayerFile(p));
+        } catch (IOException e) {
+            e.printStackTrace();
+            Logger.logError(e.getMessage());
+            Logger.logError("Issue saving player life.");
+        }  
+    }
+    //Get Regen Timer
+    public static int getRegenTimer(Player p){
+        FileConfiguration config = DatabaseManager.getPlayerFileConfiguration(p);
+        return config.getInt("RegenTimer");
+    }
 }
