@@ -8,6 +8,8 @@ import org.fitznet.doomdns.fitznethardcore.FitzNetHardcore;
 import org.fitznet.doomdns.fitznethardcore.Logger;
 import org.fitznet.doomdns.util.BasicUtil;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class AddLifeCommand implements CommandExecutor{
     private FitzNetHardcore plugin;
     
@@ -22,10 +24,15 @@ public class AddLifeCommand implements CommandExecutor{
         if (command.getName().equals("addlife")) {
             if (sender instanceof Player) {
                 final Player player = (Player) sender;
+                if(sender.hasPermission("FitzNetHardcore.addife")){
                 // Add one life
                 sender.sendMessage("Adding 1 life for player " + sender.getName());
                 BasicUtil.addLife(player);
                 return true;
+                }else{
+                    player.sendMessage(ChatColor.RED + "You dont have permission to use this command!");
+                    return false;
+                }
             }else{
                 Logger.logError("This command cannot be used on console.");
                 return true;
