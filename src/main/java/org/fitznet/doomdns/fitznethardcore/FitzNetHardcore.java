@@ -17,6 +17,7 @@
 package org.fitznet.doomdns.fitznethardcore;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -26,9 +27,8 @@ import org.fitznet.doomdns.util.BasicUtil;
 
 import java.io.File;
 
+@Slf4j
 public final class FitzNetHardcore extends JavaPlugin {
-
-    private DatabaseManager dbm = new DatabaseManager(this);
 
     // ******************************************************************************
 
@@ -39,7 +39,7 @@ public final class FitzNetHardcore extends JavaPlugin {
     public void onEnable() {
 
         // Plugin startup logic
-        Logger.logInfo("FitzNet starting up.");
+        log.info("FitzNet starting up.");
         // Load file and copy on every reload
         getConfig().options().copyDefaults();
         // Saves file from above
@@ -59,7 +59,7 @@ public final class FitzNetHardcore extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        Logger.logInfo("Fitz-Net Shutting down gracefully.");
+        log.info("Fitz-Net Shutting down gracefully.");
     }
 
     // **********************METHODS*************************************************
@@ -82,7 +82,7 @@ public final class FitzNetHardcore extends JavaPlugin {
                 // player.giveExp(10);
             } else
                 // User is on the console (ADMIN ONLY)
-                Logger.logInfo("Hello Server Master.");
+                log.info("Hello Server Master.");
         }
 
         // Returns the number of lives the player has
@@ -94,7 +94,7 @@ public final class FitzNetHardcore extends JavaPlugin {
                         ChatColor.RED + player.getName() + "... you have " + DatabaseManager.getInt(player, "Lives") + " lives!");
 
             } else {
-                Logger.logInfo("This command cannot be used on Console.");
+                log.info("This command cannot be used on Console.");
             }
         }
         // Add one life to player

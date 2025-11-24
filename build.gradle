@@ -1,0 +1,73 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'org.fitznet.doomdns'
+version = '1.15.2-SNAPSHOT'
+description = 'Hardcore mod. Gives lives and regen.'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven {
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+    // Updated to modern JSON library (Gson is maintained by Google)
+    implementation 'com.google.code.gson:gson:2.11.0'
+
+    // Updated to latest Spigot API (or use Paper API for better performance)
+    compileOnly 'org.spigotmc:spigot-api:1.21.3-R0.1-SNAPSHOT'
+    // Alternative: compileOnly 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+
+    // Updated JetBrains annotations
+    implementation 'org.jetbrains:annotations:26.0.1'
+
+    // Lombok for SLF4J annotation support
+    compileOnly 'org.projectlombok:lombok:1.18.34'
+    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+
+    // SLF4J API (implementation provided by Spigot/Paper)
+    compileOnly 'org.slf4j:slf4j-api:2.0.16'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+processResources {
+    filesMatching('plugin.yml') {
+        expand(
+            'project': [
+                'version': project.version
+            ]
+        )
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    archiveBaseName.set('Fitz-NetHardcore')
+    archiveVersion.set('1.15.2-SNAPSHOT')
+}
+
+build {
+    dependsOn shadowJar
+}

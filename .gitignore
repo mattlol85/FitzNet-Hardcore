@@ -1,0 +1,18 @@
+# Gradle
+.gradle/
+build/
+
+# Maven (can be removed if migrating away from Maven)
+target/
+
+# IDEs
+.idea/*
+*.iml
+*.iws
+*.ipr
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+

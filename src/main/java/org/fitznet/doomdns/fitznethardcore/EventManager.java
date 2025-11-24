@@ -2,6 +2,7 @@ package org.fitznet.doomdns.fitznethardcore;
 
 import java.util.HashMap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.BanList;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -13,6 +14,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import org.fitznet.doomdns.util.BasicUtil;
 
+
+@Slf4j
 public class EventManager implements Listener {
     private FitzNetHardcore plugin;
     private static HashMap<Player, BukkitTask> timerMap = new HashMap<>();
@@ -38,7 +41,7 @@ public class EventManager implements Listener {
 
         // Get the new player Object
         Player player = p.getPlayer();
-        Logger.logInfo(p.getPlayer() + " Join Event Trigger.");
+        log.info("{} Join Event Trigger.", player.getName());
         //Check if new
         if(!DatabaseManager.exists(p.getPlayer())){
         //Create config file for player

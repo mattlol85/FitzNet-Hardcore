@@ -1,5 +1,6 @@
 package org.fitznet.doomdns.fitznethardcore;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -7,6 +8,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 
+@Slf4j
 public class DatabaseManager {
     static private FitzNetHardcore plugin;
     static private final File folder = new File("plugins/Fitz-NetHardcore/PlayerData//");
@@ -27,7 +29,7 @@ public class DatabaseManager {
         FileConfiguration configFile = null;
         File playerFile = new File(folder , player.getUniqueId().toString()+ ".yml");
         try {
-            Logger.logDebug(folder + player.getUniqueId().toString()+".yml");
+            log.debug("{}{}.yml", folder, player.getUniqueId().toString());
             playerFile.createNewFile();
             configFile = YamlConfiguration.loadConfiguration(playerFile);
             configFile.addDefault("Name", player.getDisplayName());
@@ -37,9 +39,7 @@ public class DatabaseManager {
             configFile.options().copyDefaults(true);
             configFile.save(playerFile);
         } catch (IOException e) {
-            Logger.logError(e.getMessage());
-            // e.printStackTrace();
-            Logger.logError("Error opening/writing player config!");
+            log.error("Error opening/writing player config!", e);
         }
     }
     /**

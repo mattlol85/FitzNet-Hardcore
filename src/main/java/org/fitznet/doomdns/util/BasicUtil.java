@@ -2,14 +2,15 @@ package org.fitznet.doomdns.util;
 
 import java.io.IOException;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.fitznet.doomdns.fitznethardcore.DatabaseManager;
-import org.fitznet.doomdns.fitznethardcore.Logger;
 
 /**
  * Basic Utilities Class
  */
+@Slf4j
 public class BasicUtil {
     /**
      * Adds a singluar life to a player
@@ -23,8 +24,8 @@ public class BasicUtil {
             config.save(DatabaseManager.getPlayerFile(p));
         } catch (IOException e) {
             e.printStackTrace();
-            Logger.logError(e.getMessage());
-            Logger.logError("Issue adding player life.");
+            log.error(e.getMessage());
+            log.error("Issue adding player life.");
         }
     }
     /**
@@ -39,10 +40,8 @@ public class BasicUtil {
         try {
             config.save(DatabaseManager.getPlayerFile(p));
         } catch (IOException e) {
-            e.printStackTrace();
-            Logger.logError(e.getMessage());
-            Logger.logError("Issue setting player life.");
-        }  
+            log.error("Issue setting player life.", e);
+        }
     }
     /**
      * Removes a singular life from a player
@@ -55,10 +54,8 @@ public class BasicUtil {
         try {
             config.save(DatabaseManager.getPlayerFile(p));
         } catch (IOException e) {
-            e.printStackTrace();
-            Logger.logError(e.getMessage());
-            Logger.logError("Issue setting player life.");
-        }  
+            log.error("Issue removing player life.", e);
+        }
     }
     public static int getPlayerLives(Player p){
         return DatabaseManager.getInt(p, "Lives");

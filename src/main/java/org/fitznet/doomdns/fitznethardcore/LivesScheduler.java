@@ -1,9 +1,11 @@
 package org.fitznet.doomdns.fitznethardcore;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.fitznet.doomdns.util.BasicUtil;
 
+@Slf4j
 public class LivesScheduler extends BukkitRunnable {
 
     FitzNetHardcore plugin;
@@ -17,7 +19,7 @@ public class LivesScheduler extends BukkitRunnable {
 
     @Override
     public void run(){
-        Logger.logDebug("Scheduler: Adding Life for " + player.getName());
+        log.debug("Scheduler: Adding Life for {}", player.getName());
         BasicUtil.addLife(player);
     }
 }
