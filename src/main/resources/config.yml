@@ -2,12 +2,34 @@
 # F I T Z  N E T  H A R D C O R E #
 ###################################
 
-# MAXIMUM amount of lives a player can have before ban/kick/adventure mode
+# MAXIMUM amount of lives a player can have (normal gameplay, admins can exceed)
 MaxLives: 3
 
 # How long should it take to regenerate a life?
-# IN MINUITES || Ex) 2 * 1200ms -- 2 Min Timer
+# IN MINUTES || Ex) 2 * 1200 ticks = 2 Min Timer
 LifeRegenTime: 2
 
 # How many lives should each player start with?
 StartingLives: 1
+
+# How many in-game days must a player survive to gain 1 life?
+# 1 Minecraft day = 20 minutes real time
+DaysPerLife: 5
+
+# Enable resurrection mechanics via diamond block sacrifice
+ResurrectionEnabled: true
+
+# Item required for resurrection (material name)
+ResurrectionItem: DIAMOND_BLOCK
+
+# Enable life gifting between players
+EnableLifeGifting: true
+
+# Broadcast messages when players die or are resurrected
+BroadcastDeaths: true
+
+# Show player lives in tab menu with color coding
+ShowTabLives: true
+
+# Optional cooldown in minutes between resurrections per player (0 = no cooldown)
+ResurrectionCooldownMinutes: 0
