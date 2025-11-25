@@ -73,6 +73,8 @@ public class FitzNetHardcore extends JavaPlugin {
         log.info("  - Life Regen Time: {} minutes", getConfig().getInt("LifeRegenTime", 2));
         log.info("  - Resurrection: {}", getConfig().getBoolean("ResurrectionEnabled", true) ? "Enabled" : "Disabled");
         log.info("  - Life Gifting: {}", getConfig().getBoolean("EnableLifeGifting", true) ? "Enabled" : "Disabled");
+        log.info("  - Keep Inventory on Death: {}", getConfig().getBoolean("KeepInventoryOnDeath", true) ? "Enabled" : "Disabled");
+        log.info("  - Keep Experience on Death: {}", getConfig().getBoolean("KeepExperienceOnDeath", true) ? "Enabled" : "Disabled");
     }
 
     private void createFolders() {

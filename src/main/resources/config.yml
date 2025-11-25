@@ -33,3 +33,10 @@ ShowTabLives: true
 
 # Optional cooldown in minutes between resurrections per player (0 = no cooldown)
 ResurrectionCooldownMinutes: 0
+
+# Keep inventory when dying with lives remaining (respawn at bed with items)
+KeepInventoryOnDeath: true
+
+# Keep experience when dying with lives remaining
+KeepExperienceOnDeath: true
+

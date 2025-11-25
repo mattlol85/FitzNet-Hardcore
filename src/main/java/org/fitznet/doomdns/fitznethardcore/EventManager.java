@@ -1,18 +1,23 @@
 package org.fitznet.doomdns.fitznethardcore;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 import org.fitznet.doomdns.util.BasicUtil;
 
 /**
@@ -22,6 +27,12 @@ import org.fitznet.doomdns.util.BasicUtil;
 public class EventManager implements Listener {
     private final FitzNetHardcore plugin;
     private static final HashMap<Player, LivesScheduler> timerMap = new HashMap<>();
+
+    // Storage for player inventory/experience when they die with lives remaining
+    private final HashMap<UUID, ItemStack[]> savedInventories = new HashMap<>();
+    private final HashMap<UUID, ItemStack[]> savedArmor = new HashMap<>();
+    private final HashMap<UUID, Integer> savedExperience = new HashMap<>();
+    private final HashMap<UUID, Integer> savedExpLevels = new HashMap<>();
 
     public EventManager(FitzNetHardcore plugin) {
         this.plugin = plugin;
@@ -72,7 +83,7 @@ public class EventManager implements Listener {
      * Sets spectator mode if out of lives
      * Broadcasts death message if configured
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player deadPlayer = event.getPlayer();
 
@@ -87,6 +98,31 @@ public class EventManager implements Listener {
         if (remainingLives > 0) {
             deadPlayer.sendMessage(Component.text("You lost 1 life! ", NamedTextColor.RED)
                 .append(Component.text("Lives remaining: " + remainingLives, NamedTextColor.YELLOW)));
+
+            // Save inventory and experience if configured
+            if (plugin.getConfig().getBoolean("KeepInventoryOnDeath", true)) {
+                // Save inventory contents
+                savedInventories.put(deadPlayer.getUniqueId(), deadPlayer.getInventory().getContents().clone());
+                savedArmor.put(deadPlayer.getUniqueId(), deadPlayer.getInventory().getArmorContents().clone());
+
+                // Clear drops
+                event.getDrops().clear();
+                event.setKeepInventory(true);
+
+                log.debug("Saved inventory for {} to restore on respawn", deadPlayer.getName());
+            }
+
+            if (plugin.getConfig().getBoolean("KeepExperienceOnDeath", true)) {
+                // Save experience
+                savedExperience.put(deadPlayer.getUniqueId(), deadPlayer.getTotalExperience());
+                savedExpLevels.put(deadPlayer.getUniqueId(), deadPlayer.getLevel());
+
+                // Prevent experience drop
+                event.setDroppedExp(0);
+                event.setKeepLevel(true);
+
+                log.debug("Saved experience for {} to restore on respawn", deadPlayer.getName());
+            }
         } else {
             deadPlayer.sendMessage(Component.text("YOU HAVE NO LIVES REMAINING!", NamedTextColor.DARK_RED, TextDecoration.BOLD));
             deadPlayer.sendMessage(Component.text("You are now in spectator mode until someone resurrects you.", NamedTextColor.RED));
@@ -118,15 +154,95 @@ public class EventManager implements Listener {
     }
 
     /**
+     * onPlayerRespawn - Handle player respawn
+     * Restores inventory and experience if player had lives remaining
+     * Teleports to bed spawn location if available
+     */
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+
+        // Check if we have saved data (means player had lives remaining)
+        boolean hasSavedData = savedInventories.containsKey(uuid) || savedExperience.containsKey(uuid);
+
+        if (!hasSavedData) {
+            // Player ran out of lives - let vanilla respawn handle it
+            return;
+        }
+
+        // Set respawn location to bed spawn if available
+        Location bedSpawn = player.getRespawnLocation();
+        if (bedSpawn != null) {
+            event.setRespawnLocation(bedSpawn);
+            log.debug("Respawning {} at bed location: {}", player.getName(), bedSpawn);
+        } else {
+            log.debug("No bed spawn found for {}, using world spawn", player.getName());
+        }
+
+        // Schedule inventory and experience restoration after respawn
+        SchedulerUtil.runEntityTaskLater(plugin, player, () -> {
+            // Restore inventory
+            if (savedInventories.containsKey(uuid)) {
+                ItemStack[] inventory = savedInventories.remove(uuid);
+                ItemStack[] armor = savedArmor.remove(uuid);
+
+                if (inventory != null) {
+                    player.getInventory().setContents(inventory);
+                }
+                if (armor != null) {
+                    player.getInventory().setArmorContents(armor);
+                }
+
+                log.debug("Restored inventory for {}", player.getName());
+            }
+
+            // Restore experience
+            if (savedExperience.containsKey(uuid)) {
+                Integer totalExp = savedExperience.remove(uuid);
+                Integer expLevels = savedExpLevels.remove(uuid);
+
+                if (totalExp != null) {
+                    player.setTotalExperience(totalExp);
+                }
+                if (expLevels != null) {
+                    player.setLevel(expLevels);
+                }
+
+                log.debug("Restored experience for {}", player.getName());
+            }
+
+            // Confirm to player
+            int lives = BasicUtil.getPlayerLives(player);
+            if (bedSpawn != null) {
+                player.sendMessage(Component.text("You respawned at your bed with your items! ", NamedTextColor.GREEN)
+                    .append(Component.text("Lives: " + lives, NamedTextColor.YELLOW)));
+            } else {
+                player.sendMessage(Component.text("You respawned with your items! ", NamedTextColor.GREEN)
+                    .append(Component.text("Lives: " + lives, NamedTextColor.YELLOW))
+                    .append(Component.text(" (Set a bed to respawn there next time!)", NamedTextColor.GRAY)));
+            }
+        }, 1L);
+    }
+
+    /**
      * Stop the timer on disconnect
      */
     @EventHandler
     public void onPlayerLeave(PlayerQuitEvent event) {
         Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+
         LivesScheduler scheduler = timerMap.remove(player);
         if (scheduler != null) {
             scheduler.cancel();
         }
+
+        // Clean up any saved data (in case player disconnects before respawning)
+        savedInventories.remove(uuid);
+        savedArmor.remove(uuid);
+        savedExperience.remove(uuid);
+        savedExpLevels.remove(uuid);
 
         // Update name in database in case it changed
         PlayerData data = DatabaseManager.loadPlayerData(player);
