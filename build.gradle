@@ -30,25 +30,21 @@ repositories {
 }
 
 dependencies {
-    // Updated to modern JSON library (Gson is maintained by Google)
     implementation 'com.google.code.gson:gson:2.11.0'
-
-    // Updated to latest Spigot API (or use Paper API for better performance)
-    compileOnly 'org.spigotmc:spigot-api:1.21.3-R0.1-SNAPSHOT'
-    // Alternative: compileOnly 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
-
-    // Updated JetBrains annotations
+    compileOnly 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+    compileOnly 'dev.folia:folia-api:1.20.1-R0.1-SNAPSHOT'
     implementation 'org.jetbrains:annotations:26.0.1'
-
-    // Lombok for SLF4J annotation support
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
-
-    // SLF4J API (implementation provided by Spigot/Paper)
     compileOnly 'org.slf4j:slf4j-api:2.0.16'
+
+    // Test dependencies
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    testImplementation 'com.github.seeseemelk:MockBukkit-v1.21:3.126.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -60,6 +56,10 @@ processResources {
             ]
         )
     }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 shadowJar {
