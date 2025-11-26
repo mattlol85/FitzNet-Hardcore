@@ -179,15 +179,20 @@ public class ResurrectionManager implements Listener {
         targetData.setSpectator(false);
         DatabaseManager.savePlayerData(targetData);
 
-        // Teleport target to resurrection location
-        target.teleport(reviveLocation.add(0, 1, 0)); // Slightly above the block
+        // Teleport target to resurrection location (async for Folia compatibility)
+        org.bukkit.Location teleportLocation = reviveLocation.clone().add(0, 1, 0); // Slightly above the block
+        target.teleportAsync(teleportLocation).thenAccept(success -> {
+            if (success) {
+                // Set game mode to survival
+                target.setGameMode(GameMode.SURVIVAL);
 
-        // Set game mode to survival
-        target.setGameMode(GameMode.SURVIVAL);
-
-        // Visual effects
-        target.getWorld().strikeLightningEffect(reviveLocation);
-        target.getWorld().strikeLightningEffect(target.getLocation());
+                // Visual effects
+                target.getWorld().strikeLightningEffect(reviveLocation);
+                target.getWorld().strikeLightningEffect(target.getLocation());
+            } else {
+                log.warn("Failed to teleport {} during resurrection", target.getName());
+            }
+        });
 
         // Messages
         target.sendMessage(Component.text("You have been resurrected by ", NamedTextColor.GREEN)
