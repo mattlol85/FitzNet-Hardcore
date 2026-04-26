@@ -7,6 +7,8 @@ group = 'org.fitznet.doomdns'
 version = '1.15.2-SNAPSHOT'
 description = 'Hardcore mod. Gives lives and regen.'
 
+def platformApiVersion = '1.21.3-R0.1-SNAPSHOT'
+
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -30,9 +32,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.11.0'
-    compileOnly 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
-    compileOnly 'dev.folia:folia-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly "io.papermc.paper:paper-api:${platformApiVersion}"
     implementation 'org.jetbrains:annotations:26.0.1'
     compileOnly 'org.projectlombok:lombok:1.18.34'
     annotationProcessor 'org.projectlombok:lombok:1.18.34'
@@ -41,6 +41,7 @@ dependencies {
     // Test dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
     testImplementation 'com.github.seeseemelk:MockBukkit-v1.21:3.126.0'
+    testImplementation 'org.mockito:mockito-core:5.14.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -65,7 +66,7 @@ test {
 shadowJar {
     archiveClassifier.set('')
     archiveBaseName.set('Fitz-NetHardcore')
-    archiveVersion.set('1.15.2-SNAPSHOT')
+    archiveVersion.set(project.version.toString())
 }
 
 build {

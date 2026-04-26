@@ -1,5 +1,12 @@
-package org.fitznet.doomdns.fitznethardcore;
+package org.fitznet.doomdns.hardcore;
 
+
+import org.fitznet.doomdns.hardcore.data.DatabaseManager;
+import org.fitznet.doomdns.hardcore.data.PlayerData;
+import org.fitznet.doomdns.hardcore.listener.ResurrectionManager;
+import org.fitznet.doomdns.hardcore.service.ScoreboardManager;
+import org.fitznet.doomdns.hardcore.scheduler.LivesScheduler;
+import org.fitznet.doomdns.hardcore.scheduler.SchedulerUtil;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import org.junit.jupiter.api.AfterEach;

@@ -1,6 +1,6 @@
-package org.fitznet.doomdns.util;
+package org.fitznet.doomdns.hardcore.util;
 
-import org.fitznet.doomdns.fitznethardcore.PlayerData;
+import org.fitznet.doomdns.hardcore.data.PlayerData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

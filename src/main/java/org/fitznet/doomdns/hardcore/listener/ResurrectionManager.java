@@ -38,7 +38,7 @@ public class ResurrectionManager implements Listener {
 
     private Material getConfiguredResurrectionMaterial() {
         String configuredMaterial = plugin.getConfig().getString("ResurrectionItem", "DIAMOND_BLOCK");
-        Material material = Material.matchMaterial(configuredMaterial == null ? "DIAMOND_BLOCK" : configuredMaterial);
+        Material material = Material.matchMaterial(configuredMaterial);
         if (material == null) {
             log.warn("Invalid ResurrectionItem '{}', falling back to DIAMOND_BLOCK", configuredMaterial);
             return Material.DIAMOND_BLOCK;

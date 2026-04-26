@@ -178,7 +178,7 @@ public class EventManager implements Listener {
         }
 
         // Set respawn location to bed spawn if available
-        Location bedSpawn = player.getBedSpawnLocation();
+        Location bedSpawn = player.getRespawnLocation();
         if (bedSpawn != null) {
             event.setRespawnLocation(bedSpawn);
             log.debug("Respawning {} at bed location: {}", player.getName(), bedSpawn);

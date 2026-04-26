@@ -6,7 +6,8 @@ build/
 target/
 
 # IDEs
-.idea/*
+.idea/
+.vscode/
 *.iml
 *.iws
 *.ipr

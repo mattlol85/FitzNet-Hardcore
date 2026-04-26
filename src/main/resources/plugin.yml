@@ -1,6 +1,6 @@
 name: Fitz-NetHardcore
 version: ${project.version}
-main: org.fitznet.doomdns.fitznethardcore.FitzNetHardcore
+main: org.fitznet.doomdns.hardcore.FitzNetHardcore
 api-version: '1.21'
 folia-supported: true
 authors: [MatthewFitzgerald]
@@ -8,7 +8,7 @@ description: Hardcore mod with lives system, resurrection mechanics, and spectat
 website: fitznet.doomdns.org
 commands:
   fitznet:
-    description: Testing method.
+    description: Display plugin status and admin help.
     usage: /<command>
     permission: fitznethardcore.admin
   lives:
@@ -33,7 +33,7 @@ commands:
     description: Set target player for resurrection. Place diamond block and right-click to revive.
     usage: /revive <player>
   fndebug:
-    description: Show ALL players lives in the database.
+    description: Show online player life state summary.
     usage: /<command>
     permission: fitznethardcore.admin
 permissions:

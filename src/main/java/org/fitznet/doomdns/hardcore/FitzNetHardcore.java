@@ -313,7 +313,16 @@ public class FitzNetHardcore extends JavaPlugin {
         // Transfer life atomically so sender cannot lose a life without target receiving one.
         boolean transferred = DatabaseManager.transferOneLife(player, target, maxLives);
         if (!transferred) {
-            player.sendMessage(Component.text("Life transfer failed. Please try again.", NamedTextColor.RED));
+            int currentSenderLives = DatabaseManager.getLives(player);
+            int currentTargetLives = DatabaseManager.getLives(target);
+
+            if (currentSenderLives <= 1) {
+                player.sendMessage(Component.text("Life transfer failed: you need at least 2 lives to give one away!", NamedTextColor.RED));
+            } else if (currentTargetLives >= maxLives) {
+                player.sendMessage(Component.text("Life transfer failed: " + target.getName() + " already has maximum lives!", NamedTextColor.RED));
+            } else {
+                player.sendMessage(Component.text("Life transfer failed: player data could not be loaded or life counts changed during transfer.", NamedTextColor.RED));
+            }
             return true;
         }
 
